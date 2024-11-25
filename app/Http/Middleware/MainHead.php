@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
+
+class MainHead
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (Auth::guard('main_head')->check()) {
+            return $next($request); // Allow access to the route
+        }
+        return redirect()->route('login')->with('error', 'You do not have permission to access this page.');
+        // return $next($request);
+    }
+}
