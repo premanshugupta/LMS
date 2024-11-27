@@ -39,48 +39,33 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($teachers as $teacher)
+                                {{-- @forelse($teachers as $teacher) --}}
+                                @foreach($teachersData as $teacher)
                                 <tr>
-                                    <td> {{$loop->iteration}} </td>
-                                    <td>{{$teacher->name}}</td>
-                                    <td>{{$teacher->email}}</td>
-                                    <td>{{$teacher->role}}</td>
+                                    <td>{{ $teacher['id'] }}</td>
+                                    <td>{{ $teacher['name'] }}</td>
+                                    <td>{{ $teacher['email'] }}</td>
+                                    <td>{{ $teacher['role'] }}</td>
 
                                     <!-- Display assigned batches -->
                                     <td>
-                                        @if($teacher->batches->isEmpty())
-                                        Not Assigned
-                                    @else
-                                
-                                        @foreach ($teacher->batches as $batch)
-                                        
-                                            {{ $batch->name }} @if (!$loop->last), @endif
-                                        @endforeach
-                                    @endif
+                                    @foreach($teacher['batches'] as $batch)
+                                    <a href="#" class="btn btn-info split-btn-info text-white fw-bolder btn-small">{{ $batch }}</a> 
+                                @endforeach
                                     </td>  
-                                    
-                                    <!-- Display assigned subBatches -->
                                     <td>
-                                        @if($teacher->subBatches->isEmpty())
-                                            Not Assigned
-                                        @else
-                                            @foreach ($teacher->subBatches as $subBatch)
-                                                {{ $subBatch->name }} @if (!$loop->last), @endif
-                                            @endforeach
-                                        @endif
+                                        @foreach($teacher['sub_batches'] as $subBatch)
+                                        <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch }}</a> 
+                                    @endforeach
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('edit_staff', $teacher->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        <a href="{{ route('delete_staff', $teacher->id) }}" class="btn btn-danger btn-sm"
+                                        <a href="{{ route('edit_staff', $teacher['id']) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="{{ route('delete_staff', $teacher['id']) }}" class="btn btn-danger btn-sm"
                                            onclick="return confirm('Are you sure you want to delete this staff?')">Delete</a>
                                     </td>
                                 </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No Teachers Found</td>
-                                </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,13 +28,21 @@ Route::get('/logout',"App\Http\Controllers\AuthManager@logout")->name('logout');
 
 Route::middleware(['auth', 'Teacher'])->group(function () {
     // Add other teacher-specific routes here
+    Route::get('/teacher_dashboard', "App\Http\Controllers\AuthManager@teacher_dashboard")->name('teacher_dashboard');
+    Route::get('/assign-task', "App\Http\Controllers\StaffController@assignTaskPost")->name('assign_task');
+    Route::get('/assign-task-store', "App\Http\Controllers\StaffController@storeTask")->name('assign_task.Post');
+    Route::get('/assign-class', "App\Http\Controllers\StaffController@assignClass")->name('assign_class');
+    Route::get('/assign-lecture', "App\Http\Controllers\StaffController@assignLecture")->name('assign_lecture');
+    // Route::post('/assign-task', "App\Http\Controllers\StaffController@assignTaskPost")->name('assign_task.Post');
 });
-Route::get('/teacher_dashboard', "App\Http\Controllers\AuthManager@teacher_dashboard")->name('teacher_dashboard');
 
 
 Route::middleware(['auth', 'Student'])->group(function () {
 
     Route::get('/student_dashboard', "App\Http\Controllers\AuthManager@student_dashboard")->name('student_dashboard');
+    Route::get('/student_dashboard', "App\Http\Controllers\AuthManager@student_dashboard")->name('student_dashboard');
+    Route::get('/sub-batches/{batch_id}', "App\Http\Controllers\StudentController@getSubBatches")->name('sub_batches');
+    // Route::get('/sub-batches/{batch_id}', [StudentController::class, 'getSubBatches'])->name('sub_batches');
 });
 
 Route::middleware('main_head')->group(function () {
@@ -75,3 +84,6 @@ Route::middleware('main_head')->group(function () {
 });
 
 
+// Route::get('/assign-task',function() {
+//     return view('assignment.assign_class');
+// });

@@ -44,19 +44,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($students as $student)
+                                @forelse($studentsData as $student)
                                 <tr>
-                                    <td> {{$loop->iteration}} </td>
-                                    <td>{{$student->name}}</td>
-                                    <td>{{$student->email}}</td>
-                                    <td> {{$student->role}} </td>
-                                    <td>{{$student->assigned_batch_id ?? 'Not Assigned'}}</td>
-                                    <td> {{$student->assigned_sub_batch_id ?? 'Not assigned'}} </td>
+                                    <td> {{$student['id']}} </td>
+                                    <td>{{$student['name']}}</td>
+                                    <td>{{$student['email']}}</td>
+                                    <td> {{$student['role']}} </td>
                                     <td>
-                                        <a href="{{ route('edit_student', $student->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                        @foreach($student['batches'] as $batch)
+                                        <a href="#" class="btn btn-info split-btn-info text-white fw-bolder btn-small">{{ $batch ?? 'Not Assigned' }}</a> 
+                                    @endforeach
+                                        </td>  
+                                        <td>
+                                            @foreach($student['sub_batches'] as $subBatch)
+                                            <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch ?? 'Not Assigned' }}</a> 
+                                        @endforeach
+                                        </td>
+                                    <td>
+                                        <a href="{{ route('edit_student', $student['id']) }}" class="btn btn-primary btn-sm">Edit</a>
                                         {{-- <a href="" class="btn btn-primary btn-sm">Edit</a> --}}
-                                        <a href="" class="btn btn-info text-white btn-sm">View</a>
-                                        <a href="{{ route('delete_student', $student->id) }}" class="btn btn-danger btn-sm"
+                                        {{-- <a href="" class="btn btn-info text-white btn-sm">View</a> --}}
+                                        <a href="{{ route('delete_student', $student['id']) }}" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
                                     </td>
                                 </tr>
@@ -66,27 +74,9 @@
                                 </tr>
                                 @endforelse
                                 
-                                {{-- <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                    <td>$320,800</td>
-                                </tr> --}}
+                               
                                 
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>

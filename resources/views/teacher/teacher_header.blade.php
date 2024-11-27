@@ -268,7 +268,7 @@
                         </div>
                     </li>
 
-                    <li class="nav-item dropdown dropdown-large">
+                    {{-- <li class="nav-item dropdown dropdown-large">
                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" data-bs-toggle="dropdown"><span class="alert-count">7</span>
                             <i class='bx bx-bell'></i>
                         </a>
@@ -392,8 +392,8 @@
                                 </div>
                             </a>
                         </div>
-                    </li>
-                    <li class="nav-item dropdown dropdown-large">
+                    </li> --}}
+                    {{-- <li class="nav-item dropdown dropdown-large">
                         <a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
                             <i class='bx bx-shopping-bag'></i>
                         </a>
@@ -578,7 +578,7 @@
                                 </div>
                             </a>
                         </div>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
             <div class="user-box dropdown px-3">

@@ -49,18 +49,61 @@ class User extends Authenticatable
     ];
 
 
-            public function batches()
-            {
-                return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids');
-                            // ->withPivot('batch_ids');
-                            // ->wherePivot('batch_ids', '!=', null);  // Filter out empty data if necessary
-            }
+    //         public function batches($role = null)
+    //         {
+    //             // return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
+    //             //                         ->withPivot('role', 'batch_ids')
+    //             //                         ->wherePivot('role', $role);
+    //                          // Filter out empty data if necessary
 
-      public function subBatches()
-      {
-          return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids');
-                    //   ->withPivot('sub_batches_ids');  // Filter out empty data if necessary
-      }
+    //                  $query = $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
+    //                     ->withPivot('role', 'batch_ids');
+
+    //                 if ($role) {
+    //                     $query->wherePivot('role', $role); // Filter by dynamic role
+    //                 }
+
+    //                 return $query;
+    //         }
+
+    //   public function subBatches($role = null)
+    //   {
+    //     //   return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+    //     //                             ->withPivot('role', 'sub_batches_ids')
+    //     //                                     ->wherePivot('role', $role); 
+    //                 //   ->withPivot('sub_batches_ids');  // Filter out empty data if necessary
+    //                 $query = $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+    //                 ->withPivot('role', 'sub_batches_ids');
+  
+    //   if ($role) {
+    //       $query->wherePivot('role', $role); // Filter by dynamic role
+    //   }
+  
+    //   return $query;
+    //   }
+
+//     public function batches()
+// {
+//     return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_id');
+// }
+
+// public function subBatches()
+// {
+//     return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batch_id');
+// }
+
+
+      public function getAllBatches()
+{
+    return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
+                ->withPivot('role', 'batch_ids');
+}
+
+public function getAllSubBatches()
+{
+    return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+                ->withPivot('role', 'sub_batches_ids');
+}
 
     public function getBatchIdsAttribute()
 {
