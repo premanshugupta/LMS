@@ -148,6 +148,22 @@ class StudentController extends Controller
 
     //     return redirect()->route('view_student')->with('success', 'Staff updated successfully!');
     // }
+
+
+    public function getSubBatchesByBatch(Request $request)
+{
+    $batchIds = explode(',', $request->query('batch_ids', ''));
+
+    if (empty($batchIds)) {
+        return response()->json([], 200); // Return empty if no batch IDs are selected
+    }
+
+    // Fetch sub-batches for the given batch IDs
+    $subBatches = SubBatch::whereIn('batch_id', $batchIds)->get(['id', 'name', 'batch_id']);
+
+    return response()->json($subBatches, 200); // Return sub-batches as JSON
+}
+
     public function updateStudent(Request $request, $id)
 {
     // Validate incoming request data
@@ -157,6 +173,13 @@ class StudentController extends Controller
         'batch_ids' => 'array|nullable',
         'sub_batches_ids' => 'array|nullable', 
     ]);
+
+     // Validate the condition: If batch_ids is assigned, at least one sub_batches_ids must also be assigned
+    if (!empty($request->batch_ids) && empty($request->sub_batches_ids)) {
+        return redirect()->back()->withErrors([
+            'sub_batches_ids' => 'At least one Sub Batch must be assigned when a batch is assigned.',
+        ])->withInput();
+    }
 
     
     $student = User::where('role', 'Student')->findOrFail($id);
@@ -170,16 +193,37 @@ class StudentController extends Controller
     $batchIds = $request->batch_ids ?? [];  // Array of batch IDs
     $subBatchIds = $request->sub_batches_ids ?? [];  // Array of sub-batch IDs (nullable)
 
+      // Fetch existing batch and sub-batch data for the teacher
+      $batchUser = DB::table('batch_user')->where('user_id', $student->id)->first();
+      $existingBatchIds = $batchUser ? json_decode($batchUser->batch_ids, true) : [];
+      $existingSubBatchIds = $batchUser ? json_decode($batchUser->sub_batches_ids, true) : [];
+  
+      // Check if batch_ids or sub_batches_ids have changed
+      $isBatchChanged = $batchIds != $existingBatchIds;
+      $isSubBatchChanged = $subBatchIds != $existingSubBatchIds;
+  
+      if ($isBatchChanged || $isSubBatchChanged) {
+          // Only update or insert if there is a change in batch or sub-batch data
+          DB::table('batch_user')->updateOrInsert(
+              ['user_id' => $student->id],
+              [
+                  'batch_ids' => json_encode($batchIds),
+                  'sub_batches_ids' => json_encode($subBatchIds),
+                  'role' => 'Teacher',
+                  'updated_at' => now(), // Update the timestamp
+              ]
+          );
+      }
 
-    DB::table('batch_user')->updateOrInsert(
-        ['user_id' => $student->id],
-        [
-            'batch_ids' => json_encode($batchIds),  
-            'sub_batches_ids' => json_encode($subBatchIds),  
-            'role' => 'Student',
-            'updated_at' => now(),  // Update the timestamp
-        ]
-    );
+    // DB::table('batch_user')->updateOrInsert(
+    //     ['user_id' => $student->id],
+    //     [
+    //         'batch_ids' => json_encode($batchIds),  
+    //         'sub_batches_ids' => json_encode($subBatchIds),  
+    //         'role' => 'Student',
+    //         'updated_at' => now(),  // Update the timestamp
+    //     ]
+    // );
 
     // Redirect to the staff view page with success message
     return redirect()->route('view_student')->with('success', 'Staff updated successfully!');

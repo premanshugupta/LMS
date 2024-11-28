@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,11 @@ Route::middleware('main_head')->group(function () {
     // Route::get('/edit-staff',"App\Http\Controllers\StaffController@editStaff")->name('edit_staff');
     Route::post('/update-staff/{id}',"App\Http\Controllers\StaffController@updateStaff")->name('update_staff');
     Route::get('/delete-staff/{id}',"App\Http\Controllers\StaffController@deleteStaff")->name('delete_staff');
+    Route::get('/get-sub-batches-by-batch',"App\Http\Controllers\StaffController@getSubBatchesByBatch")->name('getSubBatchesByBatch');
+    // Route::post('/get-sub-batches-by-batch', [StaffController::class, 'getSubBatchesByBatch'])->name('getSubBatchesByBatch');
+
+
+
     
     // Batch Route Below
     Route::get('/add-Batch',"App\Http\Controllers\BatchController@addBatch")->name('add_Batch');
