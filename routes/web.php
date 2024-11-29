@@ -30,20 +30,19 @@ Route::get('/logout',"App\Http\Controllers\AuthManager@logout")->name('logout');
 Route::middleware(['auth', 'Teacher'])->group(function () {
     // Add other teacher-specific routes here
     Route::get('/teacher_dashboard', "App\Http\Controllers\AuthManager@teacher_dashboard")->name('teacher_dashboard');
+    Route::get('/teacher_dashboard', "App\Http\Controllers\StaffController@teacherDashboard")->name('teacher_dashboard');
     Route::get('/assign-task', "App\Http\Controllers\StaffController@assignTaskPost")->name('assign_task');
     Route::get('/assign-task-store', "App\Http\Controllers\StaffController@storeTask")->name('assign_task.Post');
     Route::get('/assign-class', "App\Http\Controllers\StaffController@assignClass")->name('assign_class');
     Route::get('/assign-lecture', "App\Http\Controllers\StaffController@assignLecture")->name('assign_lecture');
-    // Route::post('/assign-task', "App\Http\Controllers\StaffController@assignTaskPost")->name('assign_task.Post');
 });
 
 
 Route::middleware(['auth', 'Student'])->group(function () {
 
     Route::get('/student_dashboard', "App\Http\Controllers\AuthManager@student_dashboard")->name('student_dashboard');
-    Route::get('/student_dashboard', "App\Http\Controllers\AuthManager@student_dashboard")->name('student_dashboard');
+    Route::get('/student_dashboard', "App\Http\Controllers\StudentController@studentDashboard")->name('student_dashboard');
     Route::get('/sub-batches/{batch_id}', "App\Http\Controllers\StudentController@getSubBatches")->name('sub_batches');
-    // Route::get('/sub-batches/{batch_id}', [StudentController::class, 'getSubBatches'])->name('sub_batches');
 });
 
 Route::middleware('main_head')->group(function () {
@@ -54,13 +53,10 @@ Route::middleware('main_head')->group(function () {
     Route::get('/addStaff',"App\Http\Controllers\StaffController@addStaff")->name('add_staff');
     Route::post('/addStaff',"App\Http\Controllers\StaffController@addStaffPost")->name('add_staff.post');
     Route::get('/ViewStaff',"App\Http\Controllers\StaffController@viewStaff")->name('view_staff');
-    // Route::get('/ViewStaffData',"App\Http\Controllers\StaffController@viewStaffPost")->name('view_staff.post');
     Route::get('/edit-staff/{id}',"App\Http\Controllers\StaffController@editStaff")->name('edit_staff');
-    // Route::get('/edit-staff',"App\Http\Controllers\StaffController@editStaff")->name('edit_staff');
     Route::post('/update-staff/{id}',"App\Http\Controllers\StaffController@updateStaff")->name('update_staff');
     Route::get('/delete-staff/{id}',"App\Http\Controllers\StaffController@deleteStaff")->name('delete_staff');
     Route::get('/get-sub-batches-by-batch',"App\Http\Controllers\StaffController@getSubBatchesByBatch")->name('getSubBatchesByBatch');
-    // Route::post('/get-sub-batches-by-batch', [StaffController::class, 'getSubBatchesByBatch'])->name('getSubBatchesByBatch');
 
 
 
@@ -88,8 +84,3 @@ Route::middleware('main_head')->group(function () {
     Route::post('/update-student/{id}',"App\Http\Controllers\StudentController@updateStudent")->name('update_student');
     Route::get('/delete-student/{id}',"App\Http\Controllers\StudentController@deleteStudent")->name('delete_student');
 });
-
-
-// Route::get('/assign-task',function() {
-//     return view('assignment.assign_class');
-// });

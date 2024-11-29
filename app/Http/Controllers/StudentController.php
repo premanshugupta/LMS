@@ -15,22 +15,6 @@ class StudentController extends Controller
         return view('student.add_student');
     }
 
-    // function viewStudent(Request $request){
-    //     $role = $request->role; // Get the role dynamically from the request (e.g., 'Student' or 'Teacher')
-
-    // if (!$role) {
-    //     // Default to 'Student' if no role is passed
-    //     $role = 'Student';
-    // }
-    //      // Fetch users based on the selected role
-    //     $students = User::where('role', $role)
-    //     ->with(['batches' => fn($query) => $query->wherePivot('role', $role), 
-    //             'subBatches' => fn($query) => $query->wherePivot('role', $role)])
-    //     ->get();
-        
-    //     // $students = User::where('role', 'Student')->get();
-    //     return view('student.view_student', compact('students'));
-    // }
     function viewStudent(Request $request){
         // Fetch all teachers
         $students = User::where('role', 'Student')->get();
@@ -116,40 +100,6 @@ class StudentController extends Controller
     return view('student.edit_student', compact('student', 'batches', 'subBatches', 'batchIds', 'subBatchIds'));
 }
 
-    // function updateStudent(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email,' . $id,
-    //         'batch_ids' => 'array', // Ensure batch_ids is an array
-    //         'sub_batch_ids' => 'array', // Ensure sub_batch_ids is an array
-    //     ]); 
-
-    //     $student = User::where('role', 'Student')->findOrFail($id);
-    //         $student->name = $request->name;
-    //         $student->email = $request->email;
-    //         $student->save();
-    //         // Sync batches and sub-batches with the pivot table
-    //          $student->batches()->sync($request->batch_ids ?? [], ['role' => 'Student']);
-    //         $student->subBatches()->sync($request->sub_batch_ids ?? [], ['role' => 'Student']);
-    //         // Convert batches and sub-batches to JSON format
-    //         $batchIds = $request->batches ?? []; // Array of batch IDs
-    //         $subBatchIds = $request->sub_batches ?? []; // Array of sub-batch IDs, or empty array
-
-    //     DB::table('batch_user')->updateOrInsert(
-    //         ['user_id' => $student->id],
-    //         [
-    //         'batch_ids' => json_encode($batchIds),// Store batch IDs as JSON
-    //         'sub_batches_ids' => json_encode($subBatchIds),
-    //         'role' => 'Student',
-    //         'updated_at' => now(),
-    //     ]
-    // );
-
-    //     return redirect()->route('view_student')->with('success', 'Staff updated successfully!');
-    // }
-
-
     public function getSubBatchesByBatch(Request $request)
 {
     $batchIds = explode(',', $request->query('batch_ids', ''));
@@ -214,17 +164,6 @@ class StudentController extends Controller
               ]
           );
       }
-
-    // DB::table('batch_user')->updateOrInsert(
-    //     ['user_id' => $student->id],
-    //     [
-    //         'batch_ids' => json_encode($batchIds),  
-    //         'sub_batches_ids' => json_encode($subBatchIds),  
-    //         'role' => 'Student',
-    //         'updated_at' => now(),  // Update the timestamp
-    //     ]
-    // );
-
     // Redirect to the staff view page with success message
     return redirect()->route('view_student')->with('success', 'Staff updated successfully!');
 }
@@ -237,13 +176,44 @@ class StudentController extends Controller
         return redirect()->route('view_student')->with('success', 'Staff deleted successfully!');
     }
 
-    public function getSubBatches($batch_id)
+public function studentDashboard()
 {
-    // Assuming you have a relationship between Batch and SubBatch
-    $subBatches = Batch::find($batch_id)->subBatches;
+    // Get the authenticated student
+    $student = auth()->user();
 
-    // Return the sub-batches as a JSON response
-    return response()->json($subBatches);
+    // Ensure the user is a student
+    if ($student->role !== 'Student') {
+        return redirect()->route('home')->with('error', 'Access denied.');
+    }
+
+    // Fetch the batch_user record for the student
+    $batchUser = DB::table('batch_user')
+        ->where('user_id', $student->id)
+        ->where('role', 'Student')
+        ->first();
+
+    // Check if the student has assigned batches
+    if (!$batchUser) {
+        return view('student.student_dashboard', ['assignedBatches' => []]);
+    }
+
+    // Decode the batch_ids and sub_batch_ids
+    $batchIds = json_decode($batchUser->batch_ids, true);
+    $subBatchIds = json_decode($batchUser->sub_batch_ids, true);
+
+    // Fetch the Batch models
+    $assignedBatches = Batch::whereIn('id', $batchIds)->get();
+
+    // Attach sub-batches to each batch
+    $assignedBatches->each(function ($batch) use ($subBatchIds) {
+        $batch->subBatches = SubBatch::where('batch_id', $batch->id)
+                                     ->whereIn('id', $subBatchIds)
+                                     ->get();
+    });
+
+    // Return view with assigned batches and their respective sub-batches
+    return view('student.student_dashboard', compact('assignedBatches'));
 }
+
 
 }

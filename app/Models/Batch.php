@@ -19,6 +19,6 @@ class Batch extends Model
     }
     public function users()
     {
-        return $this->belongsToMany(User::class, 'batch_user', 'batch_id', 'user_id')->wherePivot('role');;
+        return $this->belongsToMany(User::class, 'batch_user', 'batch_ids', 'user_id')->wherePivot('role');;
     }
 }

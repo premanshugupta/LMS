@@ -181,52 +181,56 @@ public function updateStaff(Request $request, $id)
         return redirect()->route('view_staff')->with('success', 'Staff deleted successfully!');
     }
 
-    // function assignTask(){
-    //     return view('assignment.assign_task');
-    // }
+public function teacherDashboard()
+{
+    // Get the authenticated user
+    $teacher = auth()->user();
+
+    // Ensure the user is a teacher
+    if ($teacher->role !== 'Teacher') {
+        return redirect()->route('home')->with('error', 'Access denied.');
+    }
+
+    // Fetch the batch_user record for the teacher
+    $batchUser = DB::table('batch_user')
+        ->where('user_id', $teacher->id)
+        ->where('role', 'Teacher')
+        ->first();
+
+    // Check if the teacher has assigned batches
+    if (!$batchUser) {
+        return view('teacher.teacher_dashboard', ['assignedBatches' => []]);
+    }
+
+    // Decode the batch_ids and sub_batch_ids
+    $batchIds = json_decode($batchUser->batch_ids, true);
+    $subBatchIds = json_decode($batchUser->sub_batches_ids, true);
+
+    // Fetch the Batch models
+    $assignedBatches = Batch::whereIn('id', $batchIds)->get();
+
+    // Attach sub-batches to each batch
+    $assignedBatches->each(function ($batch) use ($subBatchIds) {
+        $batch->subBatches = SubBatch::where('batch_id', $batch->id)
+                                     ->whereIn('id', $subBatchIds)
+                                     ->get();
+    });
+
+    // Return view with assigned batches and their sub-batches
+    return view('teacher.teacher_dashboard', compact('assignedBatches'));
+}
+
+    function assignTask(){
+        return view('assignment.assign_task');
+    }
+
+
     function assignClass(){
         return view('assignment.assign_class');
     }
     function assignLecture(){
         return view('assignment.assign_lecture');
     }
-
-     function assignTaskPost()
-{
-    $batches = Batch::all(); // All available batches
-    $subBatches = SubBatch::all(); // All available sub-batches
-    $students = User::where('role', 'Student')->with(['batch', 'subBatch'])->get(); // Students with their assigned batches and sub-batches
-
-    return view('assignment.assign_task', compact('batches', 'subBatches', 'students'));
-}
-
- function storeTask(Request $request)
-{
-    $request->validate([
-        'batch_id' => 'nullable|exists:batches,id',
-        'sub_batch_id' => 'nullable|exists:sub_batches,id',
-        'selected_students' => 'nullable|array',
-        'doc_file' => 'nullable|file|mimes:pdf,doc,docx',
-        'link' => 'nullable|url',
-    ]);
-
-    // Save the uploaded file
-    $filePath = null;
-    if ($request->hasFile('doc_file')) {
-        $filePath = $request->file('doc_file')->store('tasks', 'public');
-    }
-
-    // Save task in the database
-    // Task::create([
-    //     'batch_id' => $request->batch_id,
-    //     'sub_batch_id' => $request->sub_batch_id,
-    //     'students' => $request->selected_students ? json_encode($request->selected_students) : null,
-    //     'file_path' => $filePath,
-    //     'link' => $request->link,
-    // ]);
-
-    return redirect()->back()->with('success', 'Task Assigned Successfully!');
-}
 
 
 }

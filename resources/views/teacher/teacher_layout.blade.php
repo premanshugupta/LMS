@@ -34,7 +34,9 @@
 	<!--wrapper-->
 	<div class="wrapper">
 		<!--sidebar wrapper -->
-		@include('teacher.teacher_sidebar')
+		{{-- @include('teacher.teacher_sidebar') --}}
+		@include('teacher.teacher_sidebar', ['assignedBatches' => $assignedBatches ?? []])
+
 		<!--end sidebar wrapper -->
 		<!--start header -->
 		@include('teacher.teacher_header')

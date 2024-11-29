@@ -48,74 +48,35 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+        public function batches()
+    {
+        return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids');
+    }
 
-    //         public function batches($role = null)
-    //         {
-    //             // return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
-    //             //                         ->withPivot('role', 'batch_ids')
-    //             //                         ->wherePivot('role', $role);
-    //                          // Filter out empty data if necessary
 
-    //                  $query = $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
-    //                     ->withPivot('role', 'batch_ids');
-
-    //                 if ($role) {
-    //                     $query->wherePivot('role', $role); // Filter by dynamic role
-    //                 }
-
-    //                 return $query;
-    //         }
-
-    //   public function subBatches($role = null)
-    //   {
-    //     //   return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
-    //     //                             ->withPivot('role', 'sub_batches_ids')
-    //     //                                     ->wherePivot('role', $role); 
-    //                 //   ->withPivot('sub_batches_ids');  // Filter out empty data if necessary
-    //                 $query = $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
-    //                 ->withPivot('role', 'sub_batches_ids');
-  
-    //   if ($role) {
-    //       $query->wherePivot('role', $role); // Filter by dynamic role
-    //   }
-  
-    //   return $query;
-    //   }
-
-//     public function batches()
+//       public function getAllBatches()
 // {
-//     return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_id');
+//     return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
+//                 ->withPivot('role', 'batch_ids');
 // }
 
-// public function subBatches()
+// public function getAllSubBatches()
 // {
-//     return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batch_id');
+//     return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+//                 ->withPivot('role', 'sub_batches_ids');
 // }
 
-
-      public function getAllBatches()
-{
-    return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
-                ->withPivot('role', 'batch_ids');
-}
-
-public function getAllSubBatches()
-{
-    return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
-                ->withPivot('role', 'sub_batches_ids');
-}
-
-    public function getBatchIdsAttribute()
-{
-    return $this->pivot && isset($this->pivot->batch_ids) 
-        ? json_decode($this->pivot->batch_ids, true) 
-        : [];
-}
-public function getSubBatchIdsAttribute()
-{
-    return $this->pivot && isset($this->pivot->sub_batch_ids) 
-    ? json_decode($this->pivot->sub_batch_ids, true) 
-    : [];
-    // return json_decode($this->pivot->sub_batch_ids, true) ?? [];
-}
+//     public function getBatchIdsAttribute()
+// {
+//     return $this->pivot && isset($this->pivot->batch_ids) 
+//         ? json_decode($this->pivot->batch_ids, true) 
+//         : [];
+// }
+// public function getSubBatchIdsAttribute()
+// {
+//     return $this->pivot && isset($this->pivot->sub_batch_ids) 
+//     ? json_decode($this->pivot->sub_batch_ids, true) 
+//     : [];
+//     // return json_decode($this->pivot->sub_batch_ids, true) ?? [];
+// }
 }
