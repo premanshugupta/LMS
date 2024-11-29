@@ -220,17 +220,6 @@ public function teacherDashboard()
     return view('teacher.teacher_dashboard', compact('assignedBatches'));
 }
 
-    function assignTask(){
-        return view('assignment.assign_task');
-    }
-
-
-    function assignClass(){
-        return view('assignment.assign_class');
-    }
-    function assignLecture(){
-        return view('assignment.assign_lecture');
-    }
 
 
 }

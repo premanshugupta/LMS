@@ -159,7 +159,7 @@ class StudentController extends Controller
               [
                   'batch_ids' => json_encode($batchIds),
                   'sub_batches_ids' => json_encode($subBatchIds),
-                  'role' => 'Teacher',
+                  'role' => 'Student',
                   'updated_at' => now(), // Update the timestamp
               ]
           );
@@ -199,7 +199,7 @@ public function studentDashboard()
 
     // Decode the batch_ids and sub_batch_ids
     $batchIds = json_decode($batchUser->batch_ids, true);
-    $subBatchIds = json_decode($batchUser->sub_batch_ids, true);
+    $subBatchIds = json_decode($batchUser->sub_batches_ids, true);
 
     // Fetch the Batch models
     $assignedBatches = Batch::whereIn('id', $batchIds)->get();

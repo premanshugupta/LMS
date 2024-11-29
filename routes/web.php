@@ -33,8 +33,23 @@ Route::middleware(['auth', 'Teacher'])->group(function () {
     Route::get('/teacher_dashboard', "App\Http\Controllers\StaffController@teacherDashboard")->name('teacher_dashboard');
     Route::get('/assign-task', "App\Http\Controllers\StaffController@assignTaskPost")->name('assign_task');
     Route::get('/assign-task-store', "App\Http\Controllers\StaffController@storeTask")->name('assign_task.Post');
-    Route::get('/assign-class', "App\Http\Controllers\StaffController@assignClass")->name('assign_class');
-    Route::get('/assign-lecture', "App\Http\Controllers\StaffController@assignLecture")->name('assign_lecture');
+    Route::get('/add-syllabus',"App\Http\Controllers\AssignmentController@showSyllabus")->name('show_syllabus');
+    Route::post('/add-syllabus',"App\Http\Controllers\AssignmentController@addSyllabus")->name('add_syllabus');
+    Route::get('/view-syllabus', 'App\Http\Controllers\AssignmentController@viewSyllabus')->name('view_syllabus');
+    // Route to edit syllabus (optional, based on your requirements)
+    Route::get('/edit-syllabus/{id}', 'App\Http\Controllers\AssignmentController@editSyllabus')->name('edit_syllabus');
+
+    // Route to edit syllabus
+// Route::get('/edit-syllabus/{id}', 'App\Http\Controllers\AssignmentController@editSyllabus')->name('edit_syllabus');
+
+// Route to update syllabus
+Route::put('/update-syllabus/{id}', 'App\Http\Controllers\AssignmentController@updateSyllabus')->name('update_syllabus');
+
+    Route::delete('/delete-syllabus/{id}', 'App\Http\Controllers\AssignmentController@deleteSyllabus')->name('delete_syllabus');
+
+
+    Route::get('/add-class',"App\Http\Controllers\AssignmentController@showClass")->name('add_class');
+    Route::get('/add-lecture',"App\Http\Controllers\AssignmentController@showLecture")->name('add_lecture');
 });
 
 
