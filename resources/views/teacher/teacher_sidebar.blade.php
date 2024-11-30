@@ -115,7 +115,7 @@
                     <ul>
                         <li> <a class="" href="{{route('add_lecture')}}"><i class='fadeIn animated bx bx-radio-circle'></i>Add Lectures</a>
                         </li>
-                        <li> <a class="" href="#"><i class='fadeIn animated bx bx-radio-circle'></i>View Batch</a>
+                        <li> <a class="" href="{{route('view_lectures')}}"><i class='fadeIn animated bx bx-radio-circle'></i>View Lecture</a>
                         </li>
                         {{-- <li> <a class="" href="{{route('add_SubBatch')}}"><i class='fadeIn animated bx bx-plus-circle'></i>Add Sub Batch</a>
                         </li>

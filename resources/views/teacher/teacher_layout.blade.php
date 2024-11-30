@@ -8,12 +8,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
+
+		
 	<link rel="icon" href="{{url('assets/images/favicon-32x32.png')}}" type="image/png"/>
 	<!--plugins-->
-	<link href="{{url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet"/>
 	<link href="{{url('assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet"/>
 	<link href="{{url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet" />
 	<link href="{{url('assets/plugins/metismenu/css/metisMenu.min.css')}}" rel="stylesheet"/>
+	<link href="assets/plugins/fancy-file-uploader/fancy_fileupload.css" rel="stylesheet" />
+	<link href="assets/plugins/Drag-And-Drop/dist/imageuploadify.min.css" rel="stylesheet" />
 
 	<link href="{{url('assets/plugins/datatable/css/dataTables.bootstrap5.min.css')}}" rel="stylesheet" />
 	<!-- loader-->
@@ -236,6 +240,7 @@
 	<script src="{{url('assets/plugins/simplebar/js/simplebar.min.js')}}"></script>
 	<script src="{{url('assets/plugins/metismenu/js/metisMenu.min.js')}}"></script>
 	<script src="{{url('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js')}}"></script>
+	<script src="assets/plugins/fancy-file-uploader/jquery.ui.widget.js"></script>
 	<script src="{{url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js')}}"></script>
     <script src="{{url('assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
 	<script src="{{url('assets/plugins/chartjs/js/chart.js')}}"></script>
@@ -244,6 +249,23 @@
 	<script src="{{url('assets/js/index.js')}}"></script>
 	<script src="{{url('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js')}}"></script>
 	<script src="{{url('assets/plugins/select2/js/select2-custom.js')}}"></script>
+	<script src="{{url('assets/plugins/fancy-file-uploader/jquery.fileupload.js')}}"></script>
+	<script src="{{url('assets/plugins/fancy-file-uploader/jquery.iframe-transport.js')}}"></script>
+	<script src="{{url('assets/plugins/fancy-file-uploader/jquery.fancy-fileupload.js')}}"></script>
+	<script src="{{url('assets/plugins/Drag-And-Drop/dist/imageuploadify.min.js')}}"></script>
+		<script>
+			$('#fancy-file-upload').FancyFileUpload({
+				params: {
+					action: 'fileuploader'
+				},
+				maxfilesize: 1000000
+			});
+		</script>
+		<script>
+			$(document).ready(function () {
+				$('#image-uploadify').imageuploadify();
+			})
+		</script>
 	<script>
 		$(document).ready(function() {
 			var table = $('#example2').DataTable( {

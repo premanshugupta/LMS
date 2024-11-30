@@ -61,9 +61,8 @@
                                 <label for="class_link">Class Link (Optional)</label>
                                 <input type="url" name="class_link" id="class_link" class="form-control" placeholder="Enter class link (e.g., Zoom or YouTube)">
                             </div>
-
                             <div class="form-group mt-3">
-                                <label for="class_file">Upload Class File (Optional, PDF/DOC Only)</label>
+                                <label for="class_file">Upload Class File (PDF/DOC Only)</label>
                                 <input type="file" name="class_file" id="class_file" class="form-control" accept=".pdf,.doc,.docx">
                             </div>
 

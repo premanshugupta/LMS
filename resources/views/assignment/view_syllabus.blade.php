@@ -39,20 +39,6 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Assigned subBatches</td>
-                                <td>
-                                    <button class="btn btn-info text-white">View</button>
-                                </td>
-                                <td>2011/04/25</td>
-                                <td>
-                                    <a href="" class="btn btn-primary">Edit</a>
-                                    <a href="" class="btn btn-danger">Delete</a>
-                                </td>
-                            </tr>
-                        </tbody> --}}
                         <tbody>
                             @forelse ($syllabus as $index => $item)
                                 <tr>

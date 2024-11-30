@@ -284,173 +284,239 @@ class AssignmentController extends Controller
         return view('assignment.view_class', compact('classes'));
     }
 
-//     public function editClass($id)
-// {
-//     // Get the logged-in teacher
-//     $teacher = auth()->user();
 
-//     // Fetch the class details by ID
-//     $class = DB::table('classes')->where('id', $id)->where('teacher_id', $teacher->id)->first();
+    public function editClass($id)
+    {
+        // Fetch the class record by ID
+        $class = DB::table('classes')
+            ->where('id', $id)
+            ->where('teacher_id', auth()->id()) // Ensure the class belongs to the logged-in teacher
+            ->first();
 
-//     if (!$class) {
-//         return redirect()->route('view_class')->with('error', 'Class not found or unauthorized.');
-//     }
-
-//     // Fetch batches and assigned sub-batches
-//     $batches = DB::table('batches')->get();
-//     $subBatches = DB::table('sub_batches')->where('batch_id', $class->batch_id)->get();
-
-//     return view('assignment.edit_class', compact('class', 'batches', 'subBatches'));
-// }
-// public function editClass($id)
-// {
-//     // Get the logged-in teacher
-//     $teacher = auth()->user();
-
-//     // Fetch the class details by ID
-//     $class = DB::table('classes')->where('id', $id)->where('teacher_id', $teacher->id)->first();
-
-//     if (!$class) {
-//         return redirect()->route('view_class')->with('error', 'Class not found or unauthorized.');
-//     }
-
-//     // Fetch assigned batches and sub-batches for the teacher
-//     $assignedBatches = DB::table('batches')
-//         ->join('sub_batches', 'batches.id', '=', 'sub_batches.batch_id')
-//         ->select('batches.id as batch_id', 'batches.name as batch_name', 'sub_batches.id as sub_batch_id', 'sub_batches.name as sub_batch_name')
-//         ->where('batches.teacher_id', $teacher->id)
-//         ->get()
-//         ->groupBy('batch_id'); // Group by batch ID for optgroup
-
-//     return view('assignment.edit_class', compact('class', 'assignedBatches'));
-// }
-
-// public function editClass($id)
-// {
-//     // Fetch the class record by ID
-//     $class = DB::table('classes')
-//         ->where('id', $id)
-//         ->where('teacher_id', auth()->id()) // Ensure the class belongs to the logged-in teacher
-//         ->first();
-
-//     if (!$class) {
-//         return redirect()->route('view_class')->with('error', 'Unauthorized access or class not found.');
-//     }
-
-//     // Fetch sub-batches assigned to this class
-//     $assignedSubBatches = DB::table('sub_batches')
-//         ->whereIn('id', explode(',', $class->sub_batch_id))
-//         ->get();
-
-//     // Fetch their respective batch information
-//     $batches = DB::table('batches')
-//         ->whereIn('id', $assignedSubBatches->pluck('batch_id')->unique())
-//         ->get();
-
-//     return view('assignment.edit_class', compact('class', 'batches', 'assignedSubBatches'));
-// }
-
-public function editClass($id)
-{
-    // Fetch the class record by ID
-    $class = DB::table('classes')
-        ->where('id', $id)
-        ->where('teacher_id', auth()->id()) // Ensure the class belongs to the logged-in teacher
-        ->first();
-
-    if (!$class) {
-        return redirect()->route('view_class')->with('error', 'Unauthorized access or class not found.');
-    }
-
-    // Fetch sub-batches assigned to this class
-    $assignedSubBatches = DB::table('sub_batches')
-        ->whereIn('id', explode(',', $class->sub_batch_id))
-        ->get();
-
-    // Fetch their respective batch information
-    $batches = DB::table('batches')
-        ->whereIn('id', $assignedSubBatches->pluck('batch_id')->unique())
-        ->get();
-
-    return view('assignment.edit_class', compact('class', 'batches', 'assignedSubBatches'));
-}
-
-
-
-
-
-
-public function updateClass(Request $request, $id)
-{
-    // Get the logged-in teacher
-    $teacher = auth()->user();
-
-    // Fetch the class to ensure it belongs to the logged-in teacher
-    $class = DB::table('classes')->where('id', $id)->where('teacher_id', $teacher->id)->first();
-
-    if (!$class) {
-        return redirect()->route('view_class')->with('error', 'Class not found or unauthorized.');
-    }
-
-    // Validate the request
-    $validatedData = $request->validate([
-        'batch_id' => 'required|exists:batches,id',
-        'sub_batch_id' => 'required|exists:sub_batches,id',
-        'class_link' => 'nullable|url',
-        'class_file' => 'nullable|file|mimes:pdf|max:2048',
-    ]);
-
-    // Handle file upload if provided
-    $filePath = $class->file_path; // Keep existing file path if no new file is uploaded
-    if ($request->hasFile('class_file')) {
-        if ($filePath && file_exists(public_path($filePath))) {
-            unlink(public_path($filePath)); // Delete old file
+        if (!$class) {
+            return redirect()->route('view_class')->with('error', 'Unauthorized access or class not found.');
         }
 
-        $fileName = uniqid() . '.' . $request->file('class_file')->getClientOriginalExtension();
-        $filePath = '/uploads/classes/' . $fileName;
+        // Fetch sub-batches assigned to this class
+        $assignedSubBatches = DB::table('sub_batches')
+            ->whereIn('id', explode(',', $class->sub_batch_id))
+            ->get();
 
-        $request->file('class_file')->move(public_path('/uploads/classes'), $fileName);
+        // Fetch their respective batch information
+        $batches = DB::table('batches')
+            ->whereIn('id', $assignedSubBatches->pluck('batch_id')->unique())
+            ->get();
+
+        return view('assignment.edit_class', compact('class', 'batches', 'assignedSubBatches'));
     }
 
-    // Update the class record
-    DB::table('classes')->where('id', $id)->update([
-        'batch_id' => $validatedData['batch_id'],
-        'sub_batch_id' => $validatedData['sub_batch_id'],
-        'class_link' => $validatedData['class_link'],
-        'file_path' => $filePath,
-        'updated_at' => now(),
-    ]);
+    public function updateClass(Request $request, $id)
+    {
+        // Get the logged-in teacher
+        $teacher = auth()->user();
 
-    return redirect()->route('view_class')->with('success', 'Class updated successfully.');
-}
+        // Fetch the class to ensure it belongs to the logged-in teacher
+        $class = DB::table('classes')->where('id', $id)->where('teacher_id', $teacher->id)->first();
+
+        if (!$class) {
+            return redirect()->route('view_class')->with('error', 'Class not found or unauthorized.');
+        }
+
+        // Validate the request
+        $validatedData = $request->validate([
+            'batch_id' => 'required|exists:batches,id',
+            'sub_batch_id' => 'required|exists:sub_batches,id',
+            'class_link' => 'nullable|url',
+            'class_file' => 'nullable|file|mimes:pdf|max:2048',
+        ]);
+
+        // Handle file upload if provided
+        $filePath = $class->file_path; // Keep existing file path if no new file is uploaded
+        if ($request->hasFile('class_file')) {
+            if ($filePath && file_exists(public_path($filePath))) {
+                unlink(public_path($filePath)); // Delete old file
+            }
+
+            $fileName = uniqid() . '.' . $request->file('class_file')->getClientOriginalExtension();
+            $filePath = '/uploads/classes/' . $fileName;
+
+            $request->file('class_file')->move(public_path('/uploads/classes'), $fileName);
+        }
+
+        // Update the class record
+        DB::table('classes')->where('id', $id)->update([
+            'batch_id' => $validatedData['batch_id'],
+            'sub_batch_id' => $validatedData['sub_batch_id'],
+            'class_link' => $validatedData['class_link'],
+            'file_path' => $filePath,
+            'updated_at' => now(),
+        ]);
+
+        return redirect()->route('view_class')->with('success', 'Class updated successfully.');
+    }
 
 
 
     public function deleteClass($id)
-{
-    // Ensure the logged-in teacher owns the class
-    $class = DB::table('classes')->where('id', $id)->where('teacher_id', auth()->id())->first();
-
-    if (!$class) {
-        return redirect()->back()->with('error', 'Class not found or unauthorized.');
-    }
-
-    // Delete file if it exists
-    if ($class->file_path && file_exists(public_path($class->file_path))) {
-        unlink(public_path($class->file_path));
-    }
-
-    // Delete the class record
-    DB::table('classes')->where('id', $id)->delete();
-
-    return redirect()->route('view_class')->with('success', 'Class deleted successfully.');
-}
-
-
-
-    function showLecture()
     {
-        return view('assignment.assign_lecture');
+        // Ensure the logged-in teacher owns the class
+        $class = DB::table('classes')->where('id', $id)->where('teacher_id', auth()->id())->first();
+
+        if (!$class) {
+            return redirect()->back()->with('error', 'Class not found or unauthorized.');
+        }
+
+        // Delete file if it exists
+        if ($class->file_path && file_exists(public_path($class->file_path))) {
+            unlink(public_path($class->file_path));
+        }
+
+        // Delete the class record
+        DB::table('classes')->where('id', $id)->delete();
+
+        return redirect()->route('view_class')->with('success', 'Class deleted successfully.');
+    }
+
+    public function showLecture()
+    {
+        // Get the logged-in teacher
+        $teacher = auth()->user();
+
+        // Fetch assigned batches and sub-batches for the teacher
+        $batchUserRecords = DB::table('batch_user')
+            ->where('user_id', $teacher->id)
+            ->where('role', 'Teacher')
+            ->get();
+
+        $batchIds = [];
+        $subBatchIds = [];
+
+        foreach ($batchUserRecords as $record) {
+            $batchIds = array_merge($batchIds, json_decode($record->batch_ids, true) ?? []);
+            $subBatchIds = array_merge($subBatchIds, json_decode($record->sub_batches_ids, true) ?? []);
+        }
+
+        // Fetch batches and sub-batches
+        $batches = Batch::whereIn('id', $batchIds)->where('flag', 1)->get();
+        $subBatches = SubBatch::whereIn('id', $subBatchIds)->where('flag', 1)->get();
+
+        // Pass batches and sub-batches to the view
+        return view('assignment.assign_lecture', compact('batches', 'subBatches'));
+    }
+
+
+    public function addLecture(Request $request)
+    {
+        // Get the logged-in teacher
+        $teacher = auth()->user();
+
+        // Fetch assigned batches and sub-batches for the teacher
+        $batchUserRecords = DB::table('batch_user')
+            ->where('user_id', $teacher->id)
+            ->where('role', 'Teacher')
+            ->get();
+
+        $batchIds = [];
+        $subBatchIds = [];
+
+        foreach ($batchUserRecords as $record) {
+            $batchIds = array_merge($batchIds, json_decode($record->batch_ids, true) ?? []);
+            $subBatchIds = array_merge($subBatchIds, json_decode($record->sub_batches_ids, true) ?? []);
+        }
+
+        // Fetch batches and sub-batches
+        $batches = Batch::whereIn('id', $batchIds)->where('flag', 1)->get();
+        $subBatches = SubBatch::whereIn('id', $subBatchIds)->where('flag', 1)->get();
+
+        // If no batches or sub-batches are found, handle gracefully
+        if ($batches->isEmpty() || $subBatches->isEmpty()) {
+            return redirect()->back()->with('error', 'No batches or sub-batches assigned to this teacher.');
+        }
+
+        // Handle form submission   
+        if ($request->isMethod('post')) {
+            $validatedData = $request->validate([
+                'sub_batch_ids' => 'required|array|min:1',
+                'sub_batch_ids.*' => 'exists:sub_batches,id',
+                'class_link' => 'nullable|url',
+                'video_file' => 'nullable', // Video validation: max size 50MB
+            ]);
+
+            // Handle video upload
+            $videoPath = null;
+            if ($request->hasFile('video_file')) {
+                if (!file_exists(public_path('/uploads/lecture'))) {
+                    mkdir(public_path('/uploads/lecture'), 0777, true);
+                }
+                $fileName = uniqid() . '.' . $request->file('video_file')->getClientOriginalExtension();
+                $request->file('video_file')->move(public_path('/uploads/lecture'), $fileName);
+                $videoPath = '/uploads/lecture/' . $fileName;
+            }
+
+            // Insert data for each sub-batch
+            foreach ($validatedData['sub_batch_ids'] as $subBatchId) {
+                DB::table('lectures')->insert([
+                    'teacher_id' => $teacher->id,
+                    'batch_id' => SubBatch::find($subBatchId)->batch_id, // Get batch_id from SubBatch
+                    'sub_batch_id' => $subBatchId,
+                    'class_link' => $validatedData['class_link'] ?? null,
+                    'video_path' => $videoPath,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'Lecture added successfully.');
+        }
+
+        return view('assignment.assign_lecture', compact('batches', 'subBatches'));
+    }
+
+    public function viewLecture()
+    {
+        // Get the logged-in teacher
+        $teacher = auth()->user();
+
+        // Fetch the teacher's lectures
+        $lectures = DB::table('lectures')
+            ->where('teacher_id', $teacher->id)
+            ->join('batches', 'lectures.batch_id', '=', 'batches.id')  // Join with the batches table to get batch names
+            ->join('sub_batches', 'lectures.sub_batch_id', '=', 'sub_batches.id')  // Join with the sub-batches table to get sub-batch names
+            ->select('lectures.*', 'batches.name as batch_name', 'sub_batches.name as sub_batch_name')
+            ->get();
+
+        // Ensure the video_path is accessible as a public URL
+        foreach ($lectures as $lecture) {
+            $lecture->video_path = asset($lecture->video_path); // Fix the video path to use asset()
+        }
+        // Pass the lectures to the view
+        return view('assignment.view_lecture', compact('lectures'));
+    }
+
+    public function deleteLecture($id)
+    {
+        // Get the logged-in teacher
+        $teacher = auth()->user();
+
+        // Find the lecture by its ID and ensure it's the correct teacher's lecture
+        $lecture = DB::table('lectures')
+            ->where('teacher_id', $teacher->id)
+            ->where('id', $id)
+            ->first();
+
+        // Check if lecture exists
+        if ($lecture) {
+            // Delete the lecture record
+            DB::table('lectures')->where('id', $id)->delete();
+
+            // Optionally, delete the video file if it exists
+            if ($lecture->video_path && file_exists(public_path($lecture->video_path))) {
+                unlink(public_path($lecture->video_path));
+            }
+
+            return redirect()->route('view_lectures')->with('success', 'Lecture deleted successfully.');
+        }
+
+        return redirect()->route('view_lectures')->with('error', 'Lecture not found.');
     }
 }

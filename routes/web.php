@@ -48,6 +48,15 @@ Route::middleware(['auth', 'Teacher'])->group(function () {
     Route::put('/update-class/{id}',"App\Http\Controllers\AssignmentController@updateClass")->name('update_class');
     Route::delete('/delete-class/{id}',"App\Http\Controllers\AssignmentController@deleteClass")->name('delete_class');
     Route::get('/add-lecture',"App\Http\Controllers\AssignmentController@showLecture")->name('add_lecture');
+    Route::post('/add-lecture',"App\Http\Controllers\AssignmentController@addLecture")->name('add_lecture');
+    Route::get('/view-lectures',"App\Http\Controllers\AssignmentController@viewLecture")->name('view_lectures');
+    Route::delete('/delete-lecture/{id}',"App\Http\Controllers\AssignmentController@deleteLecture")->name('delete_lecture');
+    // Route::delete('/delete-lecture/{id}', [AssignmentController::class, 'deleteLecture'])->name('delete_lecture');
+
+    // Route::get('/view-lectures', [AssignmentController::class, 'showLectures'])->name('view_lectures');
+
+    // Route::post('/add-lecture', [AssignmentController::class, 'addLecture'])->name('add_lecture');
+// Route::post('/lectures/store', [AssignmentController::class, 'store'])->name('lectures.store');
 });
 
 
