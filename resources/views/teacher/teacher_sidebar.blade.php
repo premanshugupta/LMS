@@ -101,7 +101,7 @@
                     <ul>
                         <li> <a class="" href="{{route('add_class')}}"><i class='bx bx-radio-circle'></i>Add Class</a>
                         </li>
-                        <li> <a class="" href="#"><i class='bx bx-radio-circle'></i>View Student</a>
+                        <li> <a class="" href="{{route('view_class')}}"><i class='bx bx-radio-circle'></i>View Class</a>
                         </li>
 
                     </ul>

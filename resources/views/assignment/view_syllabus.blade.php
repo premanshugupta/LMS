@@ -64,7 +64,7 @@
                                     </td>
                                     <td>{{ $item->updated_at }}</td>
                                     <td>
-                                        <a href="{{ route('edit_syllabus', $item->id) }}" class="btn btn-primary">Edit</a>
+                                        <a href="{{ route('edit_syllabus', $item->id) }}" class="btn btn-warning">Edit</a>
                                         <form action="{{ route('delete_syllabus', $item->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

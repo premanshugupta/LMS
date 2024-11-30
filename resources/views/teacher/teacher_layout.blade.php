@@ -32,6 +32,31 @@
 	<link rel="stylesheet" href="{{url('assets/css/semi-dark.css')}}"/>
 	<link rel="stylesheet" href="{{url('assets/css/header-colors.css')}}"/>
 	<title>@yield('title', 'Custom Auth Laravel')</title>
+	{{-- <style>
+        .custom-heading {
+            position: relative;
+            text-align: center;
+            margin: 0px 0 0px;
+        }
+
+        .custom-heading::before {
+            content: '';
+            position: absolute;
+            bottom: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #000;
+            z-index: 0;
+        }
+
+        .custom-heading span {
+            position: relative;
+            background: #fff;
+            padding: 0 0px;
+            z-index: 1;
+        }
+    </style> --}}
 </head>
 
 <body>

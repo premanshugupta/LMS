@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
@@ -36,19 +37,16 @@ Route::middleware(['auth', 'Teacher'])->group(function () {
     Route::get('/add-syllabus',"App\Http\Controllers\AssignmentController@showSyllabus")->name('show_syllabus');
     Route::post('/add-syllabus',"App\Http\Controllers\AssignmentController@addSyllabus")->name('add_syllabus');
     Route::get('/view-syllabus', 'App\Http\Controllers\AssignmentController@viewSyllabus')->name('view_syllabus');
-    // Route to edit syllabus (optional, based on your requirements)
     Route::get('/edit-syllabus/{id}', 'App\Http\Controllers\AssignmentController@editSyllabus')->name('edit_syllabus');
-
-    // Route to edit syllabus
-// Route::get('/edit-syllabus/{id}', 'App\Http\Controllers\AssignmentController@editSyllabus')->name('edit_syllabus');
-
-// Route to update syllabus
-Route::put('/update-syllabus/{id}', 'App\Http\Controllers\AssignmentController@updateSyllabus')->name('update_syllabus');
-
+    Route::put('/update-syllabus/{id}', 'App\Http\Controllers\AssignmentController@updateSyllabus')->name('update_syllabus');
     Route::delete('/delete-syllabus/{id}', 'App\Http\Controllers\AssignmentController@deleteSyllabus')->name('delete_syllabus');
 
-
-    Route::get('/add-class',"App\Http\Controllers\AssignmentController@showClass")->name('add_class');
+    Route::get('/add-class',"App\Http\Controllers\AssignmentController@addClass")->name('add_class');
+    Route::post('/add-class',"App\Http\Controllers\AssignmentController@addClass")->name('add_class');
+    Route::get('/view-class',"App\Http\Controllers\AssignmentController@viewClass")->name('view_class');
+    Route::get('/edit-class/{id}',"App\Http\Controllers\AssignmentController@editClass")->name('edit_class');
+    Route::put('/update-class/{id}',"App\Http\Controllers\AssignmentController@updateClass")->name('update_class');
+    Route::delete('/delete-class/{id}',"App\Http\Controllers\AssignmentController@deleteClass")->name('delete_class');
     Route::get('/add-lecture',"App\Http\Controllers\AssignmentController@showLecture")->name('add_lecture');
 });
 

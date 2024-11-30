@@ -45,29 +45,6 @@
                                     </ul>
                                 </div>
                             @endif
-                            {{-- <form action="{{ route('add_syllabus') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-4">
-                                <label for="multiple-select-optgroup-field" class="form-label">Select Batch</label>
-                                <select class="form-select" name="sub_batch_ids[]" id="multiple-select-optgroup-field"
-                                    data-placeholder="Choose anything" multiple>
-
-                                    @foreach ($batches as $batch)
-                                        <optgroup label="{{ $batch->name }}">
-                                            @foreach ($subBatches->where('batch_id', $batch->id) as $subBatch)
-                                                <option value="{{ $subBatch->id }}">{{ $subBatch->name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label for="syllabus_file">Upload Syllabus (PDF Only)</label>
-                                <input type="file" name="syllabus_file" id="syllabus_file" class="form-control"
-                                       accept="application/pdf" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
-                        </form> --}}
                         <form action="{{ route('add_syllabus') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                         
