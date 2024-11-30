@@ -5,17 +5,6 @@
 <div class="page-wrapper">
     <div class="page-content">
         <!-- Breadcrumb -->
-        {{-- <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-            <div class="breadcrumb-title pe-3">Lectures</div>
-            <div class="ps-3">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0 p-0">
-                        <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i></a></li>
-                        <li class="breadcrumb-item active" aria-current="page">View Lectures</li>
-                    </ol>
-                </nav>
-            </div>
-        </div> --}}
         <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
             <div class="breadcrumb-title pe-3">Lectures</div>
             <div class="ps-3">
@@ -73,7 +62,7 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-warning">Edit</a>
+                                    <a href="{{route('edit_lecture',$lecture->id)}}" class="btn btn-warning">Edit</a>
                                     <!-- Delete Button with Confirmation -->
                                     <form action="{{ route('delete_lecture', $lecture->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this lecture?')">
                                         @csrf
@@ -111,33 +100,10 @@
 </div>
 
 @section('scripts')
-{{-- <script>
-    // On clicking the "View Video" button, set the video source to open in the modal
-    document.querySelectorAll('.view-video-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var videoSrc = button.getAttribute('data-video');
-            var videoPlayer = document.getElementById('videoPlayer');
-            var videoSource = document.getElementById('videoSource');
-            videoSource.setAttribute('src', videoSrc);
-            videoPlayer.load();
-        });
-    });
-</script> --}}
-{{-- <script>
-    document.querySelectorAll('.view-video-btn').forEach(function(button) {
-        button.addEventListener('click', function() {
-            var videoSrc = button.getAttribute('data-video');
-            var videoPlayer = document.getElementById('videoPlayer');
-            var videoSource = document.getElementById('videoSource');
-            
-            // Update the video source with the correct URL
-            videoSource.setAttribute('src', videoSrc);
-            videoPlayer.load();  // Reload the video player with the new source
-        });
-    });
-</script> --}}
+
 <script>
     document.querySelectorAll('.view-video-btn').forEach(function(button) {
+
         button.addEventListener('click', function() {
             var videoSrc = button.getAttribute('data-video');
             var videoPlayer = document.getElementById('videoPlayer');
@@ -145,6 +111,8 @@
 
             // Wait for modal to fully open before setting video source
             $('#videoModal').on('shown.bs.modal', function () {
+                console.log(videoSrc,videoSource);
+                
                 videoSource.setAttribute('src', videoSrc);
                 videoPlayer.load();  // Reload the video player with the new source
             });

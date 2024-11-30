@@ -277,6 +277,24 @@
 				.appendTo( '#example2_wrapper .col-md-6:eq(0)' );
 		} );
 	</script>
+	<script>
+		document.querySelectorAll('.view-video-btn').forEach(function(button) {
+	
+			button.addEventListener('click', function() {
+				var videoSrc = button.getAttribute('data-video');
+				var videoPlayer = document.getElementById('videoPlayer');
+				var videoSource = document.getElementById('videoSource');
+	
+				// Wait for modal to fully open before setting video source
+				$('#videoModal').on('shown.bs.modal', function () {
+					console.log(videoSrc,videoSource);
+					
+					videoSource.setAttribute('src', videoSrc);
+					videoPlayer.load();  // Reload the video player with the new source
+				});
+			});
+		});
+	</script>
 	<!--app JS-->
 	<script src="{{url('assets/js/app.js')}}"></script>
 	<script>

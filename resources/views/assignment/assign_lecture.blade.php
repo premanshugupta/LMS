@@ -44,36 +44,15 @@
                                         </optgroup>
                                     @endforeach
                                 </select>
-                                
-                                {{-- <select name="sub_batch_ids[]" id="multiple-select-optgroup-field" class="form-control" multiple required>
-                                    @foreach ($batches as $batch)
-                                        <optgroup label="{{ $batch->name }}">
-                                            @foreach ($subBatches->where('batch_id', $batch->id) as $subBatch)
-                                                <option value="{{ $subBatch->id }}">{{ $subBatch->name }}</option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select> --}}
                             </div>
 
                             <!-- Class Link -->
                             <div class="form-group mt-3">
-                                <label for="class_link">Class Link (Optional)</label>
+                                <label for="class_link">Lecture Link (Optional)</label>
                                 <input type="url" name="class_link" id="class_link" class="form-control" placeholder="Enter class link (e.g., Zoom or YouTube)">
                             </div>
 
                             <!-- Upload Video -->
-                                {{-- <div class=" form-group col-xl-12 mx-auto">
-                                    <h6 class="mb-0 text-uppercase">Upload Video</h6>
-                                    <hr/>
-                                    <label class="mt-3" for="video_file">Upload Video</label>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <input id="fancy-file-upload" name="video_file" type="file" accept="video/*" required>
-                                            <small class="form-text text-muted">Accepted formats: MP4, AVI, MOV, etc.</small>
-                                        </div>
-                                    </div>
-                                </div> --}}
                             <div class="form-group mt-3">
                                 <label for="video_file">Upload Video</label>
                                 <input type="file" name="video_file" id="video_file" class="form-control" accept="video/*" required>

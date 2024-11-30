@@ -493,6 +493,80 @@ class AssignmentController extends Controller
         return view('assignment.view_lecture', compact('lectures'));
     }
 
+    public function editLecture($id)
+{
+    // Fetch the lecture record by ID and ensure it belongs to the logged-in teacher
+    $lecture = DB::table('lectures')
+        ->where('id', $id)
+        ->where('teacher_id', auth()->id())
+        ->first();
+
+    if (!$lecture) {
+        return redirect()->route('view_lecture')->with('error', 'Unauthorized access or lecture not found.');
+    }
+
+    // Fetch sub-batches assigned to this lecture
+    $assignedSubBatches = DB::table('sub_batches')
+        ->whereIn('id', explode(',', $lecture->sub_batch_id))
+        ->get();
+
+    // Fetch their respective batch information
+    $batches = DB::table('batches')
+        ->whereIn('id', $assignedSubBatches->pluck('batch_id')->unique())
+        ->get();
+
+    return view('assignment.edit_lecture', compact('lecture', 'batches', 'assignedSubBatches'));
+}
+
+public function updateLecture(Request $request, $id)
+{
+    // Get the logged-in teacher
+    $teacher = auth()->user();
+
+    // Fetch the lecture to ensure it belongs to the logged-in teacher
+    $lecture = DB::table('lectures')
+        ->where('id', $id)
+        ->where('teacher_id', $teacher->id)
+        ->first();
+
+    if (!$lecture) {
+        return redirect()->route('view_lecture')->with('error', 'Lecture not found or unauthorized.');
+    }
+
+    // Validate the request
+    $validatedData = $request->validate([
+        'batch_id' => 'required|exists:batches,id',
+        'sub_batch_id' => 'required|exists:sub_batches,id',
+        'class_link' => 'nullable|url',
+        'lecture_video' => 'nullable|file|mimes:mp4,avi,mkv|max:51200', // Video validation: max size 50MB
+    ]);
+
+    // Handle video upload if provided
+    $videoPath = $lecture->video_path; // Keep existing video path if no new video is uploaded
+    if ($request->hasFile('lecture_video')) {
+        if ($videoPath && file_exists(public_path($videoPath))) {
+            unlink(public_path($videoPath)); // Delete old video
+        }
+
+        $fileName = uniqid() . '.' . $request->file('lecture_video')->getClientOriginalExtension();
+        $videoPath = '/uploads/lectures/' . $fileName;
+
+        $request->file('lecture_video')->move(public_path('/uploads/lectures'), $fileName);
+    }
+
+    // Update the lecture record
+    DB::table('lectures')->where('id', $id)->update([
+        'batch_id' => $validatedData['batch_id'],
+        'sub_batch_id' => $validatedData['sub_batch_id'],
+        'class_link' => $validatedData['class_link'],
+        'video_path' => $videoPath,
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->route('view_lectures')->with('success', 'Lecture updated successfully.');
+}
+
+
     public function deleteLecture($id)
     {
         // Get the logged-in teacher
@@ -519,4 +593,6 @@ class AssignmentController extends Controller
 
         return redirect()->route('view_lectures')->with('error', 'Lecture not found.');
     }
+
+
 }

@@ -50,6 +50,12 @@ Route::middleware(['auth', 'Teacher'])->group(function () {
     Route::get('/add-lecture',"App\Http\Controllers\AssignmentController@showLecture")->name('add_lecture');
     Route::post('/add-lecture',"App\Http\Controllers\AssignmentController@addLecture")->name('add_lecture');
     Route::get('/view-lectures',"App\Http\Controllers\AssignmentController@viewLecture")->name('view_lectures');
+    Route::get('/lectures/edit/{id}',"App\Http\Controllers\AssignmentController@editLecture")->name('edit_lecture');
+    Route::put('/lectures/update/{id}',"App\Http\Controllers\AssignmentController@updateLecture")->name('update_lecture');
+
+    // Route::put('/lectures/update/{id}', [AssignmentController::class, 'updateLecture'])->name('update_lecture');
+    // Route::get('/lectures/edit/{id}', [AssignmentController::class, 'editLecture'])->name('edit_lecture');
+
     Route::delete('/delete-lecture/{id}',"App\Http\Controllers\AssignmentController@deleteLecture")->name('delete_lecture');
     // Route::delete('/delete-lecture/{id}', [AssignmentController::class, 'deleteLecture'])->name('delete_lecture');
 
