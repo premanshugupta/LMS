@@ -48,35 +48,41 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-        public function batches()
+    public function batches()
     {
         return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids');
     }
+    public function subBatches()
+    {
+        return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+            ->withPivot('batch_ids')
+            ->withTimestamps();
+    }
 
 
-//       public function getAllBatches()
-// {
-//     return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
-//                 ->withPivot('role', 'batch_ids');
-// }
+    //       public function getAllBatches()
+    // {
+    //     return $this->belongsToMany(Batch::class, 'batch_user', 'user_id', 'batch_ids')
+    //                 ->withPivot('role', 'batch_ids');
+    // }
 
-// public function getAllSubBatches()
-// {
-//     return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
-//                 ->withPivot('role', 'sub_batches_ids');
-// }
+    // public function getAllSubBatches()
+    // {
+    //     return $this->belongsToMany(SubBatch::class, 'batch_user', 'user_id', 'sub_batches_ids')
+    //                 ->withPivot('role', 'sub_batches_ids');
+    // }
 
-//     public function getBatchIdsAttribute()
-// {
-//     return $this->pivot && isset($this->pivot->batch_ids) 
-//         ? json_decode($this->pivot->batch_ids, true) 
-//         : [];
-// }
-// public function getSubBatchIdsAttribute()
-// {
-//     return $this->pivot && isset($this->pivot->sub_batch_ids) 
-//     ? json_decode($this->pivot->sub_batch_ids, true) 
-//     : [];
-//     // return json_decode($this->pivot->sub_batch_ids, true) ?? [];
-// }
+    //     public function getBatchIdsAttribute()
+    // {
+    //     return $this->pivot && isset($this->pivot->batch_ids) 
+    //         ? json_decode($this->pivot->batch_ids, true) 
+    //         : [];
+    // }
+    // public function getSubBatchIdsAttribute()
+    // {
+    //     return $this->pivot && isset($this->pivot->sub_batch_ids) 
+    //     ? json_decode($this->pivot->sub_batch_ids, true) 
+    //     : [];
+    //     // return json_decode($this->pivot->sub_batch_ids, true) ?? [];
+    // }
 }

@@ -19,6 +19,20 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('login');
 // });
+Route::get('/test',function(){
+    return view('test');
+});
+
+// Route::get('/class',function(){
+//     return view('student.student_class');
+// });
+// Route::get('/syllabus',function(){
+//     return view('student.student_syllabus');
+// });
+// Route::get('/lecture',function(){
+//     return view('student.student_lecture');
+// });
+
 Route::get('/',"App\Http\Controllers\AuthManager@login")->name('login');
 Route::get('/registration',"App\Http\Controllers\AuthManager@registration")->name('registration');
 Route::post('/login',"App\Http\Controllers\AuthManager@loginPost")->name('login.post');
@@ -52,17 +66,7 @@ Route::middleware(['auth', 'Teacher'])->group(function () {
     Route::get('/view-lectures',"App\Http\Controllers\AssignmentController@viewLecture")->name('view_lectures');
     Route::get('/lectures/edit/{id}',"App\Http\Controllers\AssignmentController@editLecture")->name('edit_lecture');
     Route::put('/lectures/update/{id}',"App\Http\Controllers\AssignmentController@updateLecture")->name('update_lecture');
-
-    // Route::put('/lectures/update/{id}', [AssignmentController::class, 'updateLecture'])->name('update_lecture');
-    // Route::get('/lectures/edit/{id}', [AssignmentController::class, 'editLecture'])->name('edit_lecture');
-
     Route::delete('/delete-lecture/{id}',"App\Http\Controllers\AssignmentController@deleteLecture")->name('delete_lecture');
-    // Route::delete('/delete-lecture/{id}', [AssignmentController::class, 'deleteLecture'])->name('delete_lecture');
-
-    // Route::get('/view-lectures', [AssignmentController::class, 'showLectures'])->name('view_lectures');
-
-    // Route::post('/add-lecture', [AssignmentController::class, 'addLecture'])->name('add_lecture');
-// Route::post('/lectures/store', [AssignmentController::class, 'store'])->name('lectures.store');
 });
 
 
@@ -71,6 +75,11 @@ Route::middleware(['auth', 'Student'])->group(function () {
     Route::get('/student_dashboard', "App\Http\Controllers\AuthManager@student_dashboard")->name('student_dashboard');
     Route::get('/student_dashboard', "App\Http\Controllers\StudentController@studentDashboard")->name('student_dashboard');
     Route::get('/sub-batches/{batch_id}', "App\Http\Controllers\StudentController@getSubBatches")->name('sub_batches');
+
+    Route::get('/class',"App\Http\Controllers\StudentController@showClass")->name('class');
+    Route::get('/syllabus',"App\Http\Controllers\StudentController@showSyllabus")->name('syllabus');
+    Route::get('/show-syllabus',"App\Http\Controllers\StudentController@syllabus")->name('showSyllabus');
+    Route::get('/lecture',"App\Http\Controllers\StudentController@showLecture")->name('lecture');
 });
 
 Route::middleware('main_head')->group(function () {

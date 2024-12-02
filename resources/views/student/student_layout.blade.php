@@ -8,25 +8,25 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png"/>
+	<link rel="icon" href="{{url('assets/images/favicon-32x32.png')}}" type="image/png"/>
 	<!--plugins-->
-	<link href="assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"/>
-	<link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
-	<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
-	<link href="assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet"/>
+	<link href="{{url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css')}}" rel="stylesheet"/>
+	<link href="{{url('assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/metismenu/css/metisMenu.min.css')}}" rel="stylesheet"/>
 	<!-- loader-->
-	<link href="assets/css/pace.min.css" rel="stylesheet"/>
-	<script src="assets/js/pace.min.js"></script>
+	<link href="{{url('assets/css/pace.min.css')}}" rel="stylesheet"/>
+	<script src="{{url('assets/js/pace.min.js')}}"></script>
 	<!-- Bootstrap CSS -->
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-	<link href="../../../../external.html?link=https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
-	<link href="assets/css/app.css" rel="stylesheet">
-	<link href="assets/css/icons.css" rel="stylesheet">
+	<link href="{{url('assets/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{url('assets/css/bootstrap-extended.css')}}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+	<link href="{{url('assets/css/app.css')}}" rel="stylesheet">
+	<link href="{{url('assets/css/icons.css')}}" rel="stylesheet">
 	<!-- Theme Style CSS -->
-	<link rel="stylesheet" href="assets/css/dark-theme.css"/>
-	<link rel="stylesheet" href="assets/css/semi-dark.css"/>
-	<link rel="stylesheet" href="assets/css/header-colors.css"/>
+	<link rel="stylesheet" href="{{url('assets/css/dark-theme.css')}}"/>
+	<link rel="stylesheet" href="{{url('assets/css/semi-dark.css')}}"/>
+	<link rel="stylesheet" href="{{url('assets/css/header-colors.css')}}"/>
 	<title>@yield('title', 'Custom Auth Laravel')</title>
 </head>
 
@@ -200,21 +200,162 @@
 	</div>
 	<!--end switcher-->
 	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="{{url('assets/js/bootstrap.bundle.min.js')}}"></script>
 	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="assets/plugins/chartjs/js/chart.js"></script>
-	<script src="assets/js/index.js"></script>
+	<script src="{{url('assets/js/jquery.min.js')}}"></script>
+	<script src="{{url('assets/plugins/simplebar/js/simplebar.min.js')}}"></script>
+	<script src="{{url('assets/plugins/metismenu/js/metisMenu.min.js')}}"></script>
+	<script src="{{url('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js')}}"></script>
+	<script src="{{url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js')}}"></script>
+    <script src="{{url('assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js')}}"></script>
+	<script src="{{url('assets/plugins/chartjs/js/chart.js')}}"></script>
+	<script src="{{url('assets/js/index.js')}}"></script>
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script src="{{url('assets/js/app.js')}}"></script>
 	<script>
 		new PerfectScrollbar(".app-container")
 	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+		 const viewButtons = document.querySelectorAll('.view-btn');
+		 const fileViewer = document.getElementById('fileViewer');
+	 
+		 viewButtons.forEach(button => {
+			 button.addEventListener('click', function () {
+				 const filePath = this.getAttribute('data-file');
+				 fileViewer.src = filePath; // Update iframe to show PDF
+			 });
+		 });
+	 });
+	 
+	 </script>
+	 <script>
+		// Script to update iframe source dynamically
+		document.addEventListener('DOMContentLoaded', function () {
+			const viewButtons = document.querySelectorAll('.view-btn');
+			const pdfViewer = document.getElementById('pdfViewer');
+	
+			viewButtons.forEach(button => {
+				button.addEventListener('click', function () {
+					const filePath = this.getAttribute('data-file');
+					pdfViewer.src = filePath;
+				});
+			});
+		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+    const viewVideoButtons = document.querySelectorAll('.view-video-btn');
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    viewVideoButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const videoUrl = this.getAttribute('data-video');
+
+            // Check if the video link is from YouTube
+            if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+                // Extract the video ID from YouTube URL
+                let videoId = videoUrl.split("v=")[1];
+                if (videoId.includes("&")) {
+                    // Handle multiple query parameters (e.g., after & sign)
+                    videoId = videoId.split("&")[0];
+                }
+
+                // Construct the embeddable URL for YouTube
+                const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+                videoPlayer.src = embedUrl;
+            } else {
+                // For other video links (e.g., Vimeo or direct file paths), use the link directly
+                videoPlayer.src = videoUrl;
+            }
+        });
+    });
+});
+	</script>
+
+	{{-- Start student lecture page --}}
+	<!-- Script for Video Modal -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const viewVideoButtons = document.querySelectorAll('.view-video-btn');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        viewVideoButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const videoUrl = this.getAttribute('data-video');
+
+                // Embed YouTube URL handling
+                if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+                    let videoId = videoUrl.includes("v=") ? videoUrl.split("v=")[1] : videoUrl.split("/").pop();
+                    if (videoId.includes("&")) {
+                        videoId = videoId.split("&")[0];
+                    }
+                    videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                } else {
+                    // Non-YouTube video URLs
+                    videoPlayer.src = videoUrl;
+                }
+            });
+        });
+
+        // Clear the iframe when modal is closed
+        document.getElementById('videoModal').addEventListener('hidden.bs.modal', function () {
+            videoPlayer.src = '';
+        });
+    });
+</script>
+
+<!-- Script for Link Modal -->
+{{-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const openLinkButtons = document.querySelectorAll('.open-link-btn');
+        const linkViewer = document.getElementById('linkViewer');
+
+        openLinkButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const link = this.getAttribute('data-link');
+                linkViewer.src = link;
+            });
+        });
+
+        // Clear the iframe when modal is closed
+        document.getElementById('linkModal').addEventListener('hidden.bs.modal', function () {
+            linkViewer.src = '';
+        });
+    });
+</script> --}}
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+    const viewVideoButtons = document.querySelectorAll('.open-link-btn');
+    const videoPlayer = document.getElementById('linkViewer');
+
+    viewVideoButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const videoUrl = this.getAttribute('data-link');
+
+            // Check if the video link is from YouTube
+            if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+                // Extract the video ID from YouTube URL
+                let videoId = videoUrl.split("v=")[1];
+                if (videoId.includes("&")) {
+                    // Handle multiple query parameters (e.g., after & sign)
+                    videoId = videoId.split("&")[0];
+                }
+
+                // Construct the embeddable URL for YouTube
+                const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+
+                videoPlayer.src = embedUrl;
+            } else {
+                // For other video links (e.g., Vimeo or direct file paths), use the link directly
+                videoPlayer.src = videoUrl;
+            }
+        });
+    });
+});
+</script>
+{{-- end student lecture page --}}
 </body>
 
 
