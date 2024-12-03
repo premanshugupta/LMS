@@ -51,19 +51,19 @@
                                 <td>{{ $class->sub_batch_name }}</td>
                                 <td>
                                     @if ($class->file_path)
-                                        <a href="{{ asset($class->file_path) }}" class="btn btn-info text-white" download>Doc File</a>
+                                        <a href="{{ asset($class->file_path) }}" class="btn btn-info text-white btn-sm" download><i class="fadeIn animated bx bx-cloud-download"></i> Download</a>
                                     @endif
                                     @if ($class->class_link)
-                                        <a href="{{ $class->class_link }}" class="btn btn-primary" target="_blank">Link</a>
+                                        <a href="{{ $class->class_link }}" class="btn btn-primary btn-sm" target="_blank"><i class="fadeIn animated bx bx-link"></i> Link</a>
                                     @endif
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($class->updated_at)->format('Y-m-d H:i:s') }}</td>
                                 <td>
-                                    <a href="{{ route('edit_class', $class->id) }}" class="btn btn-warning">Edit</a>
+                                    <a href="{{ route('edit_class', $class->id) }}" class="btn btn-outline-warning btn-sm"><i class="ms-1 bx bxs-edit"></i> </a>
                                     <form action="{{ route('delete_class', $class->id) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this class?');">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm"><i class="ms-1 bx bxs-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>

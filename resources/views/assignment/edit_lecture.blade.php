@@ -60,7 +60,7 @@
                         </div>
                     @endif
 
-                    <button type="submit" class="btn btn-primary">Update Lecture</button>
+                    <button type="submit" class="btn btn-success">Update</button>
                 </form>
             </div>
         </div>

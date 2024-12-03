@@ -49,25 +49,25 @@
                                 <td>{{ $lecture->sub_batch_name }}</td>
                                 <td>
                                     @if($lecture->class_link)
-                                        <a href="{{ $lecture->class_link }}" target="_blank">View Link</a>
+                                        <a href="{{ $lecture->class_link }}" target="_blank" class="btn btn-primary btn-sm text-white"><i class="fadeIn animated bx bx-link"></i> Link</a>
                                     @else
-                                        No Link
+                                        <a href="#" class="btn btn-primary btn-sm"> No link</a>
                                     @endif
                                 </td>
                                 <td>
                                     @if($lecture->video_path)
-                                        <button class="btn btn-info view-video-btn" data-video="{{ asset($lecture->video_path) }}" data-bs-toggle="modal" data-bs-target="#videoModal">View Video</button>
+                                        <button class="btn btn-info view-video-btn btn-sm text-white" data-video="{{ asset($lecture->video_path) }}" data-bs-toggle="modal" data-bs-target="#videoModal"><i class="fadeIn animated bx bx-video"></i> Video</button>
                                     @else
-                                        No Video
+                                        <a href="#" class="btn btn-info btn-sm text-white">No Video</a>
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('edit_lecture',$lecture->id)}}" class="btn btn-warning">Edit</a>
+                                    <a href="{{route('edit_lecture',$lecture->id)}}" class="btn btn-outline-warning btn-sm"><i class="ms-1 bx bxs-edit"></i></a>
                                     <!-- Delete Button with Confirmation -->
                                     <form action="{{ route('delete_lecture', $lecture->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to delete this lecture?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm"><i class="ms-1 bx bxs-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>

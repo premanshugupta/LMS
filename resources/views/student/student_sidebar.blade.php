@@ -19,11 +19,11 @@
             </a>
         </li>
         <li>
-            <a href="javascript:;" class="has-arrow">
+            {{-- <a href="javascript:;" class="has-arrow">
                 <div class="parent-icon"><i class='bx bx-folder'></i></div>
                 <div class="menu-title">My Batches</div>
-            </a>
-            <ul>
+            </a> --}}
+            {{-- <ul>
                 @forelse ($assignedBatches as $batch)
                     <li>
                         <a href="javascript:;" class="has-arrow">
@@ -46,12 +46,12 @@
                 @empty
                     <li><a>No Batches Assigned</a></li>
                 @endforelse
-            </ul>
+            </ul> --}}
             <li>
                 <a class="has-arrow" href="javascript:;">
                     <div class="parent-icon"><i class="bx bx-menu"></i>
                     </div>
-                    <div class="menu-title">Menu Levels</div>
+                    <div class="menu-title">Management</div>
                 </a>
                 <ul>
                     <li> <a class="#" href="{{route('syllabus')}}"><i class='bx bx-radio-circle'></i>Syllabus</a>

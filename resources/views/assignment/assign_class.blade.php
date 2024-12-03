@@ -66,7 +66,7 @@
                                 <input type="file" name="class_file" id="class_file" class="form-control" accept=".pdf,.doc,.docx">
                             </div>
 
-                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            <button type="submit" class="btn btn-primary mt-3 "> <i class="fadeIn animated bx bx-cloud-upload"></i> Upload</button>
                         </form>
                     </div>
                 </div>

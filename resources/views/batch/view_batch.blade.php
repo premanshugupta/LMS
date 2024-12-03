@@ -47,16 +47,18 @@
                                     <td>{{$batch->name}}</td>
                                     <td>
                                         @if($batch->flag)
-                                        {{-- <button class="btn btn-success">Active</button> --}}
-                                        <span class="btn btn-success">Active</span>
+                                
+                                        <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i>Active</div>
+                                     
                                         @else
-                                        <span class="btn btn-danger">Deactivated</span>
+                                        <div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i>Deactivate</div>
+                                        
                                     @endif
                                     </td>
                                     <td>
                                         <form action="{{ route('toggle_batch_status', $batch->id) }}" method="POST" >
                                             @csrf
-                                            <button type="submit" class="btn  btn-warning">
+                                            <button type="submit" class="btn  btn-primary">
                                                 {{ $batch->flag ? 'Deactivate' : 'Activate' }}
                                             </button>
                                         </form>
@@ -64,28 +66,7 @@
                                 </tr>
                                
                                 @endforeach
-                                
-                                {{-- <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                    <td>$320,800</td>
-                                </tr> --}}
-                                
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>

@@ -14,7 +14,6 @@
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="lni lni-network"></i></a>
                             </li>
-                            {{-- <li class="breadcrumb-item active" aria-current="page">Data Table</li> --}}
                         </ol>
                     </nav>
                 </div>
@@ -52,20 +51,20 @@
                                     <td> {{$student['role']}} </td>
                                     <td>
                                         @foreach($student['batches'] as $batch)
-                                        <a href="#" class="btn btn-info split-btn-info text-white fw-bolder btn-small">{{ $batch ?? 'Not Assigned' }}</a> 
+                                        {{-- <a href="#" class="btn btn-info split-btn-info text-white fw-bolder btn-small">{{ $batch ?? 'Not Assigned' }}</a>  --}}
+                                        <a href="#" class="badge rounded-pill text-white bg-primary bg-gradient p-2 text-uppercase px-3">{{ $batch ?? 'Not Assigned' }}</a> 
                                     @endforeach
                                         </td>  
                                         <td>
                                             @foreach($student['sub_batches'] as $subBatch)
-                                            <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch ?? 'Not Assigned' }}</a> 
+                                            {{-- <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch ?? 'Not Assigned' }}</a>  --}}
+                                            <a href="#" class="badge rounded-pill text-white bg-primary bg-gradient p-2 text-uppercase px-3">{{ $subBatch ?? 'Not Assigned' }}</a> 
                                         @endforeach
                                         </td>
                                     <td>
-                                        <a href="{{ route('edit_student', $student['id']) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        {{-- <a href="" class="btn btn-primary btn-sm">Edit</a> --}}
-                                        {{-- <a href="" class="btn btn-info text-white btn-sm">View</a> --}}
-                                        <a href="{{ route('delete_student', $student['id']) }}" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete this student?')">Delete</a>
+                                        <a href="{{ route('edit_student', $student['id']) }}" class="btn btn-outline-primary bg-gradient btn-sm"><i class=' ms-1 bx bxs-edit'></i></a>
+                                        <a href="{{ route('delete_student', $student['id']) }}" class="btn btn-outline-danger btn-sm"
+                                            onclick="return confirm('Are you sure you want to delete this student?')"><i class='ms-1 bx bxs-trash'></i></a>
                                     </td>
                                 </tr>
                                 @empty

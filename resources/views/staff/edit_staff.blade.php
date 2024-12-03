@@ -59,7 +59,7 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-success">Update</button>
+                        <button type="submit" class="btn btn-success bg-success bg-gradient"> <i class="lni lni-cloud-upload"></i> Update</button>
                         <a href="{{ route('view_staff') }}" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>

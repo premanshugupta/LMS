@@ -67,7 +67,7 @@
                                 <input type="file" name="syllabus_file" id="syllabus_file" class="form-control"
                                        accept="application/pdf" required>
                             </div>
-                            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            <button type="submit" class="btn btn-primary mt-3"><i class="fadeIn animated bx bx-cloud-upload"></i> Upload</button>
                         </form>
                         
                     </div>

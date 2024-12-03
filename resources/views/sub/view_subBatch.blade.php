@@ -14,7 +14,6 @@
                         <ol class="breadcrumb mb-0 p-0">
                             <li class="breadcrumb-item"><a href="javascript:;"><i class="lni lni-user"></i></a>
                             </li>
-                            {{-- <li class="breadcrumb-item active" aria-current="page">Data Table</li> --}}
                         </ol>
                     </nav>
                 </div>
@@ -49,9 +48,9 @@
                                     <td> {{$subBatch->name}} </td>    <!--Sub-Batch Name-->
                                     <td>
                                         @if($subBatch->flag)
-                                        <span class="btn btn-success">Active</span>
+                                        <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i>Active</div>
                                         @else
-                                        <span class="btn btn-danger">Inactive</span>
+                                        <div class="badge rounded-pill text-danger bg-light-danger p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i>De-Active</div>
                                         @endif
                                     
                                     </td> <!-- Sub Batch Status -->
@@ -59,8 +58,8 @@
                                         <form action="{{ route('toggleSubBatchStatus', $subBatch->id) }}" method="POST">
                                             @csrf
                                             @method('PATCH')    
-                                            <button type="submit" class="btn btn-warning">
-                                                {{ $subBatch->flag ? 'Deactivate' : 'Activate' }}
+                                            <button type="submit" class="btn btn-primary">
+                                                {{ $subBatch->flag ? 'De-Active' : 'Active' }}
                                             </button>
                                         </form>
                                     </td>
@@ -71,16 +70,6 @@
                                 </tr>
                                 @endforelse
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>

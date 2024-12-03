@@ -61,7 +61,7 @@
 
                             <!-- Submit Button -->
                             {{-- <div class="form-group mt-4"> --}}
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary"><i class="fadeIn animated bx bx-cloud-upload"></i> Upload</button>
                             {{-- </div> --}}
                         </div>
                     </div>

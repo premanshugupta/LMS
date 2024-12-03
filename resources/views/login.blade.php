@@ -8,24 +8,29 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<link rel="icon" href="{{url('assets/images/favicon-32x32.png')}}" type="image/png" />
 	<!--plugins-->
-	<link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
-	<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
-	<link href="assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<link href="{{url('assets/plugins/notifications/css/lobibox.min.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/simplebar/css/simplebar.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css')}}" rel="stylesheet" />
+	<link href="{{url('assets/plugins/metismenu/css/metisMenu.min.css')}}" rel="stylesheet" />
 	<!-- loader-->
-	<link href="assets/css/pace.min.css" rel="stylesheet" />
-	<script src="assets/js/pace.min.js"></script>
+	<link href="{{url('assets/css/pace.min.css')}}" rel="stylesheet" />
+	<script src="{{url('assets/js/pace.min.js')}}"></script>
 	<!-- Bootstrap CSS -->
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-	<link href="../../../../external.html?link=https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
-	<link href="assets/css/app.css" rel="stylesheet">
-	<link href="assets/css/icons.css" rel="stylesheet">
+	<link href="{{url('assets/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link href="{{url('assets/css/bootstrap-extended.css')}}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+	<link href="{{url('assets/css/app.css')}}" rel="stylesheet">
+	<link href="{{url('assets/css/icons.css')}}" rel="stylesheet">
+	<!-- Theme Style CSS -->
+	<link rel="stylesheet" href="{{url('assets/css/dark-theme.css')}}" />
+	<link rel="stylesheet" href="{{url('assets/css/semi-dark.css')}}" />
+	<link rel="stylesheet" href="{{url('assets/css/header-colors.css')}}" />
 	<title>@yield('title', 'Login')</title>
 </head>
 
-<body class="">
+<body>
 	<!--wrapper-->
 
 	<div class="wrapper">
@@ -35,15 +40,24 @@
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
+                <li class="mt-3">{{ $error }}</li>
             @endforeach
         </ul>
     </div>
 @endif
 @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
+
+<div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+	<div class="d-flex align-items-center">
+		<div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+		</div>
+		<div class="ms-3">
+			<h6 class="mb-0 text-white">Success Alerts</h6>
+			<div class="text-white">{{ session('success') }}</div>
+		</div>
+	</div>
+	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 @endif
 				<div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
 					<div class="col mx-auto">
@@ -97,12 +111,17 @@
 	</div>
 	<!--end wrapper-->
 	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
+	<script src="{{url('assets/js/bootstrap.bundle.min.js')}}"></script>
 	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<script src="{{url('assets/js/jquery.min.js')}}"></script>
+	<script src="{{url('assets/plugins/simplebar/js/simplebar.min.js')}}"></script>
+	<script src="{{url('assets/plugins/metismenu/js/metisMenu.min.js')}}"></script>
+	<script src="{{url('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js')}}"></script>
+
+	<!--notification js -->
+	<script src="{{url('assets/plugins/notifications/js/lobibox.min.js')}}"></script>
+	<script src="{{url('assets/plugins/notifications/js/notifications.min.js')}}"></script>
+	<script src="{{url('assets/plugins/notifications/js/notification-custom-script.js')}}"></script>
 	<!--Password show & hide js -->
 	<script>
 		$(document).ready(function () {
@@ -121,7 +140,7 @@
 		});
 	</script>
 	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+	<script src="{{url('assets/js/app.js')}}"></script>
 </body>
 
 

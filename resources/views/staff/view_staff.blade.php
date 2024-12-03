@@ -50,19 +50,21 @@
                                     <!-- Display assigned batches -->
                                     <td>
                                     @foreach($teacher['batches'] as $batch)
-                                    <a href="#" class="btn btn-info split-btn-info text-white fw-bolder btn-small">{{ $batch }}</a> 
+                                    {{-- <a href="#" class="btn btn-info split-btn-info  text-white fw-bolder btn-small">{{ $batch }}</a>  --}}
+                                    <a href="#" class="badge rounded-pill text-white bg-primary bg-gradient p-2 text-uppercase px-3">{{ $batch }}</a> 
                                 @endforeach
                                     </td>  
                                     <td>
                                         @foreach($teacher['sub_batches'] as $subBatch)
-                                        <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch }}</a> 
+                                        {{-- <a href="#" class="btn btn-info split-bg-info text-white fw-bolder btn-small">{{ $subBatch }}</a>  --}}
+                                        <a href="#" class="badge rounded-pill text-white bg-primary bg-gradient p-2 text-uppercase px-3">{{ $subBatch }}</a> 
                                     @endforeach
                                     </td>
 
                                     <td>
-                                        <a href="{{ route('edit_staff', $teacher['id']) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        <a href="{{ route('delete_staff', $teacher['id']) }}" class="btn btn-danger btn-sm"
-                                           onclick="return confirm('Are you sure you want to delete this staff?')">Delete</a>
+                                        <a href="{{ route('edit_staff', $teacher['id']) }}" class="btn btn-outline-primary btn-sm"><i class='ms-1 bx bxs-edit'></i></a>
+                                        <a href="{{ route('delete_staff', $teacher['id']) }}" class="btn btn-outline-danger btn-sm"
+                                           onclick="return confirm('Are you sure you want to delete this staff?')"><i class='ms-1 bx bxs-trash'></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

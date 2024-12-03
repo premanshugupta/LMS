@@ -9,11 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 class AssignmentController extends Controller
 {
-    // function showSyllabus(){
-    //     return view('assignment.assign_syllabus');
-    // }
 
-    public function showSyllabus()
+    function showSyllabus()
     {
         // Get the logged-in teacher
         $teacher = auth()->user();
@@ -39,7 +36,7 @@ class AssignmentController extends Controller
     }
 
 
-    public function addSyllabus(Request $request)
+    function addSyllabus(Request $request)
     {
         // Get the logged-in teacher
         $teacher = auth()->user();
@@ -81,10 +78,8 @@ class AssignmentController extends Controller
 
         return redirect()->route('show_syllabus')->with('success', 'Syllabus uploaded successfully.');
     }
-    //  function viewSyllabus(){
-    //     return view('assignment.view_syllabus');
-    //  }
-    public function viewSyllabus()
+    
+    function viewSyllabus()
     {
         // Get the logged-in teacher
         $teacher = auth()->user();
@@ -104,7 +99,6 @@ class AssignmentController extends Controller
     {
         $syllabus = DB::table('syllabus')->where('id', $id)->first();
 
-        // Check if syllabus belongs to the logged-in teacher
         if ($syllabus && $syllabus->teacher_id == auth()->id()) {
             // Delete the file
             if (file_exists(public_path($syllabus->file_path))) {
@@ -121,7 +115,7 @@ class AssignmentController extends Controller
     }
 
 
-    public function editSyllabus($id)
+    function editSyllabus($id)
     {
         // Fetch the syllabus record by ID
         $syllabus = DB::table('syllabus')
@@ -147,7 +141,7 @@ class AssignmentController extends Controller
     }
 
 
-    public function updateSyllabus(Request $request, $id)
+    function updateSyllabus(Request $request, $id)
     {
         // Validate the form data
         $validatedData = $request->validate([

@@ -305,26 +305,6 @@
         });
     });
 </script>
-
-<!-- Script for Link Modal -->
-{{-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const openLinkButtons = document.querySelectorAll('.open-link-btn');
-        const linkViewer = document.getElementById('linkViewer');
-
-        openLinkButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const link = this.getAttribute('data-link');
-                linkViewer.src = link;
-            });
-        });
-
-        // Clear the iframe when modal is closed
-        document.getElementById('linkModal').addEventListener('hidden.bs.modal', function () {
-            linkViewer.src = '';
-        });
-    });
-</script> --}}
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
     const viewVideoButtons = document.querySelectorAll('.open-link-btn');

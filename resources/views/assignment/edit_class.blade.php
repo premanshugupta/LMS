@@ -57,7 +57,8 @@
                         <small class="text-muted">Leave blank to keep the existing file.</small>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Update Class</button>
+                    <button type="submit" class="btn btn-success">Update</button>
+                    <a href="{{ route('view_class') }}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
         </div>

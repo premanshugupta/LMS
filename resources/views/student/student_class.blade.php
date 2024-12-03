@@ -7,7 +7,7 @@
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-3 row-cols-xl-3">
                 @foreach ($classes as $class)
                     <div class="col">
-                        <div class="card">
+                        <div class="card radius-10 border-start border-0 border-4 border-success">
                             <div class="card-body">
                                 <h5 class="card-title">Class: </h5> <!-- You can dynamically include a class title later -->
                                 <p class="card-text"><strong>Shared By:</strong> {{ $class->teacher_name }}</p>
@@ -16,12 +16,12 @@
                                 @if ($class->file_path)
                                     <!-- Check if PDF file exists -->
                                     <!-- Button to download the PDF -->
-                                    <a href="{{ asset($class->file_path) }}" class="btn btn-success" download>Download PDF</a>
+                                    {{-- <a href="{{ asset($class->file_path) }}" class="btn btn-success" download>Download PDF</a> --}}
 
                                     <!-- Button to view the PDF -->
                                     <button type="button" class="btn btn-primary view-btn" data-bs-toggle="modal"
                                         data-bs-target="#viewPdfModal" data-file="{{ asset($class->file_path) }}">
-                                        View PDF
+                                        <i class="lni lni-eye"></i> View
                                     </button>
                                 @endif
 
@@ -30,7 +30,7 @@
                                     <!-- Button to view the video -->
                                     <button type="button" class="btn btn-primary view-video-btn" data-bs-toggle="modal"
                                         data-bs-target="#viewVideoModal" data-video="{{ $class->class_link }}">
-                                        Play Video
+                                        <i class="fadeIn animated bx bx-video"></i> Video
                                     </button>
                                 @endif
                             </div>

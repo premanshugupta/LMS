@@ -48,8 +48,8 @@
                                 <input type="file" name="syllabus_file" id="syllabus_file" class="form-control" accept="application/pdf">
                             </div>
 
-                            <button type="submit" class="btn btn-primary mt-3">Update</button>
-                            <a href="{{ route('view_syllabus') }}" class="btn btn-secondary mt-3">Cancel</a>
+                            <button type="submit" class="btn btn-success mt-3">Update</button>
+                            <a href="{{ route('view_syllabus') }}" class="btn btn-secondary mt-3"> Cancel</a>
                         </form>
                     </div>
                 </div>

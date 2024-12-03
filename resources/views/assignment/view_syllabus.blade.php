@@ -46,15 +46,15 @@
                                     <td>{{ $item->batch_name }}</td>
                                     <td>{{ $item->sub_batch_name }}</td>
                                     <td>
-                                        <a href="{{ asset($item->file_path) }}" class="btn btn-info text-white" download>Download</a>
+                                        <a href="{{ asset($item->file_path) }}" class=" btn btn-info text-white btn-sm" download> <i class="ms-1 fadeIn animated bx bx-cloud-download"></i>Download</a>
                                     </td>
                                     <td>{{ $item->updated_at }}</td>
                                     <td>
-                                        <a href="{{ route('edit_syllabus', $item->id) }}" class="btn btn-warning">Edit</a>
+                                        <a href="{{ route('edit_syllabus', $item->id) }}" class="btn btn-outline-warning btn-sm"><i class='ms-1 bx bxs-edit'></i></a>
                                         <form action="{{ route('delete_syllabus', $item->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure?')"><i class='ms-1 bx bxs-trash'></i></button>
                                         </form>
                                     </td>
                                 </tr>
