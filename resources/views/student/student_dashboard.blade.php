@@ -15,10 +15,10 @@
                             @forelse ($batch->subBatches as $subBatch)
                             <b> Batch: {{ $subBatch->name }}</b>        
                             @empty
-                                <li><a>No Sub-Batches Assigned</a></li>
+                                <b> No Sub-Batches Assigned </b>
                             @endforelse
                 @empty
-                    <li><a>No Batches Assigned</a></li>
+                    <b>No Batches Assigned </b>
                 @endforelse
                 </div>
                 

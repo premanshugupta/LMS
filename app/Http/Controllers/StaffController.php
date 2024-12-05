@@ -12,7 +12,12 @@ use Illuminate\Http\Request;
 class StaffController extends Controller
 {
     function addStaff(){
-        return view('staff.add_staff');
+        // Fetch active batches and sub-batches
+    $activeBatches = Batch::where('flag', 1)->get();
+    $activeSubBatches = SubBatch::where('flag', 1)->get();
+
+    // Pass the data to the view
+    return view('staff.add_staff', compact('activeBatches', 'activeSubBatches'));
     }
 
     function viewStaff(){
@@ -64,21 +69,42 @@ class StaffController extends Controller
        
     }
 
-    function addStaffPost(Request $request){
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
-        ]);
+public function addStaffPost(Request $request)
+{
+    // Validate incoming request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required',
+        'batches' => 'array|nullable', // Ensure batches are selected
+        'sub_batches' => 'array|nullable', // Ensure sub-batches are selected
+    ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password), // Hash the password
-            'role' => 'Teacher', // Predefined role
-        ]);
-        return redirect()->route('add_staff')->with('success', 'Staff added successfully!');
-    }
+    // Create the teacher (user)
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password), // Hash the password
+        'role' => 'Teacher', // Predefined role
+    ]);
+
+    // Prepare the batch and sub-batch data as arrays
+    $batchIds = $request->batches ?? [];
+    $subBatchIds = $request->sub_batches ?? [];
+
+    // Store the batch and sub-batch data in the 'batch_user' table
+    DB::table('batch_user')->insert([
+        'user_id' => $user->id,
+        'batch_ids' => json_encode($batchIds),  // Store as JSON array
+        'sub_batches_ids' => json_encode($subBatchIds),  // Store as JSON array
+        'role' => 'Teacher',
+        'created_at' => now(),  // Set the creation timestamp
+    ]);
+
+    // Redirect with success message
+    return redirect()->route('add_staff')->with('success', 'Staff added successfully!');
+}
+
 
 
 function editStaff($id)

@@ -12,8 +12,12 @@ use Illuminate\Support\Facades\Redis;
 class StudentController extends Controller
 {
     function addStudent()
-    {
-        return view('student.add_student');
+    {   
+        $activeBatches = Batch::where('flag', 1)->get();
+        $activeSubBatches = SubBatch::where('flag', 1)->get();
+    
+        // Pass the data to the view
+        return view('student.add_student', compact('activeBatches', 'activeSubBatches'));
     }
 
     function viewStudent(Request $request)
@@ -71,14 +75,28 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required',
+            'batches' => 'array|nullable', // Ensure batches are selected
+            'sub_batches' => 'array|nullable', // Ensure sub-batches are selected
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password), // Hash the password
             'role' => 'Student', // Predefined role
         ]);
+
+        $batchIds = $request->batches ?? [];
+        $subBatchIds = $request->sub_batches ?? [];
+
+        DB::table('batch_user')->insert([
+            'user_id' => $user->id,
+            'batch_ids' => json_encode($batchIds),  // Store as JSON array
+            'sub_batches_ids' => json_encode($subBatchIds),  // Store as JSON array
+            'role' => 'Student',
+            'created_at' => now(),  // Set the creation timestamp
+        ]);
+
         return redirect()->route('view_student')->with('success', 'Staff added successfully!');
     }
 
@@ -178,6 +196,44 @@ class StudentController extends Controller
         return redirect()->route('view_student')->with('success', 'Staff deleted successfully!');
     }
 
+    // public function studentDashboard()
+    // {
+    //     // Get the authenticated student
+    //     $student = auth()->user();
+
+    //     // Ensure the user is a student
+    //     if ($student->role !== 'Student') {
+    //         return redirect()->route('home')->with('error', 'Access denied.');
+    //     }
+
+    //     // Fetch the batch_user record for the student
+    //     $batchUser = DB::table('batch_user')
+    //         ->where('user_id', $student->id)
+    //         ->where('role', 'Student')
+    //         ->first();
+
+    //     // Check if the student has assigned batches
+    //     if (!$batchUser) {
+    //         return view('student.student_dashboard', ['assignedBatches' => []]);
+    //     }
+
+    //     // Decode the batch_ids and sub_batch_ids
+    //     $batchIds = json_decode($batchUser->batch_ids, true);
+    //     $subBatchIds = json_decode($batchUser->sub_batches_ids, true);
+
+    //     // Fetch the Batch models
+    //     $assignedBatches = Batch::whereIn('id', $batchIds)->get();
+
+    //     // Attach sub-batches to each batch
+    //     $assignedBatches->each(function ($batch) use ($subBatchIds) {
+    //         $batch->subBatches = SubBatch::where('batch_id', $batch->id)
+    //             ->whereIn('id', $subBatchIds)
+    //             ->get();
+    //     });
+
+    //     // Return view with assigned batches and their respective sub-batches
+    //     return view('student.student_dashboard', compact('assignedBatches'));
+    // }
     public function studentDashboard()
     {
         // Get the authenticated student
@@ -196,48 +252,64 @@ class StudentController extends Controller
 
         // Check if the student has assigned batches
         if (!$batchUser) {
-            return view('student.student_dashboard', ['assignedBatches' => []]);
+            return view('student.student_dashboard', ['assignedBatches' => [], 'message' => 'No Batch Assigned']);
         }
 
         // Decode the batch_ids and sub_batch_ids
-        $batchIds = json_decode($batchUser->batch_ids, true);
-        $subBatchIds = json_decode($batchUser->sub_batches_ids, true);
+        $batchIds = json_decode($batchUser->batch_ids, true) ?? [];
+        $subBatchIds = json_decode($batchUser->sub_batches_ids, true) ?? [];
 
-        // Fetch the Batch models
-        $assignedBatches = Batch::whereIn('id', $batchIds)->get();
+        // Fetch only batches with flag = 1
+        $validBatches = Batch::whereIn('id', $batchIds)
+            ->where('flag', 1)
+            ->get();
 
-        // Attach sub-batches to each batch
-        $assignedBatches->each(function ($batch) use ($subBatchIds) {
+        // Attach sub-batches to each valid batch only if subBatch flag is 1
+        $validBatches->each(function ($batch) use ($subBatchIds) {
             $batch->subBatches = SubBatch::where('batch_id', $batch->id)
                 ->whereIn('id', $subBatchIds)
+                ->where('flag', 1) // Filter by flag
                 ->get();
         });
 
+        // If no valid batches or sub-batches are found, show "No Batch Assigned"
+        if ($validBatches->isEmpty() || $validBatches->every(fn($batch) => $batch->subBatches->isEmpty())) {
+            return view('student.student_dashboard', ['assignedBatches' => [], 'message' => 'No Batch Assigned']);
+        }
+
         // Return view with assigned batches and their respective sub-batches
-        return view('student.student_dashboard', compact('assignedBatches'));
+        return view('student.student_dashboard', ['assignedBatches' => $validBatches]);
     }
 
-    // function showSyllabus(){
-    //     return view('student.student_syllabus');
-    // }
 
-    // function ShowSyllabus()
+    // function showSyllabus()
     // {
     //     $student = auth()->user();
 
-    //     // Fetch assigned sub-batches for the student
-    //     $subBatchIds = DB::table('batch_user')
+    //     // Step 1: Fetch assigned batches and sub-batches for the logged-in student
+    //     $batchUserRecord = DB::table('batch_user')
     //         ->where('user_id', $student->id)
     //         ->where('role', 'Student')
-    //         ->pluck('sub_batches_ids');
+    //         ->first();
 
-    //     // Fetch syllabus shared with the sub-batches
+    //     if (!$batchUserRecord) {
+    //         // No batch or sub-batch assigned to the student
+    //         return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+    //     }
+
+    //     // Decode batch_ids and sub_batches_ids
+    //     $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
+    //     $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
+
+    //     // Step 2: Fetch syllabi assigned to the sub-batches the student belongs to
     //     $syllabi = DB::table('syllabus')
     //         ->join('users', 'syllabus.teacher_id', '=', 'users.id') // Join to get teacher's name
     //         ->whereIn('syllabus.sub_batch_id', $subBatchIds)
+    //         ->where('syllabus.file_path', 'like', '%.pdf') // Only fetch PDFs
     //         ->select('syllabus.id', 'syllabus.file_path', 'syllabus.updated_at', 'users.name as teacher_name')
     //         ->get();
 
+    //     // Step 3: Pass the data to the view
     //     return view('student.student_syllabus', compact('syllabi'));
     // }
 
@@ -260,119 +332,185 @@ class StudentController extends Controller
         $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
         $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
 
-        // Step 2: Fetch syllabi assigned to the sub-batches the student belongs to
+        // Step 2: Validate batch and sub-batch flags
+        $validBatchIds = DB::table('batches')
+            ->whereIn('id', $batchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
+
+        $validSubBatchIds = DB::table('sub_batches')
+            ->whereIn('id', $subBatchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
+
+        if (empty($validBatchIds) || empty($validSubBatchIds)) {
+            return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        }
+
+        // Step 3: Fetch syllabi for valid sub-batches
         $syllabi = DB::table('syllabus')
             ->join('users', 'syllabus.teacher_id', '=', 'users.id') // Join to get teacher's name
-            ->whereIn('syllabus.sub_batch_id', $subBatchIds)
+            ->whereIn('syllabus.sub_batch_id', $validSubBatchIds)
             ->where('syllabus.file_path', 'like', '%.pdf') // Only fetch PDFs
             ->select('syllabus.id', 'syllabus.file_path', 'syllabus.updated_at', 'users.name as teacher_name')
             ->get();
 
-        // Step 3: Pass the data to the view
+        // Step 4: Pass the data to the view
         return view('student.student_syllabus', compact('syllabi'));
     }
 
 
-
-    // function showClass()
+    // public function showClass()
     // {
-    //     return view('student.student_class');
+    //     $student = auth()->user();
+
+    //     // Step 1: Fetch assigned batches and sub-batches for the logged-in student
+    //     $batchUserRecord = DB::table('batch_user')
+    //         ->where('user_id', $student->id)
+    //         ->where('role', 'Student')
+    //         ->first();
+
+    //     if (!$batchUserRecord) {
+    //         // No batch or sub-batch assigned to the student
+    //         return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+    //     }
+
+    //     // Decode batch_ids and sub_batches_ids
+    //     $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
+    //     $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
+
+    //     // Step 2: Fetch classes and related PDFs assigned to the sub-batches the student belongs to
+    //     $classes = DB::table('classes')
+    //         ->join('users', 'classes.teacher_id', '=', 'users.id') // Join to get teacher's name
+    //         ->whereIn('classes.sub_batch_id', $subBatchIds)
+    //         ->select('classes.id', 'classes.class_link', 'classes.file_path', 'classes.updated_at', 'users.name as teacher_name')
+    //         ->get();
+
+    //     // Step 3: Pass the data to the view
+    //     return view('student.student_class', compact('classes'));
     // }
+    public function showClass()
+    {
+        $student = auth()->user();
 
-//     public function showClass()
-// {
-//     $student = auth()->user();
+        // Step 1: Fetch assigned batches and sub-batches for the logged-in student
+        $batchUserRecord = DB::table('batch_user')
+            ->where('user_id', $student->id)
+            ->where('role', 'Student')
+            ->first();
 
-//     // Step 1: Fetch assigned batches and sub-batches for the logged-in student
-//     $batchUserRecord = DB::table('batch_user')
-//         ->where('user_id', $student->id)
-//         ->where('role', 'Student')
-//         ->first();
+        if (!$batchUserRecord) {
+            // No batch or sub-batch assigned to the student
+            return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        }
 
-//     if (!$batchUserRecord) {
-//         // No batch or sub-batch assigned to the student
-//         return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
-//     }
+        // Decode batch_ids and sub_batches_ids
+        $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
+        $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
 
-//     // Decode batch_ids and sub_batches_ids
-//     $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
-//     $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
+        // Step 2: Validate batch and sub-batch flags
+        $validBatchIds = DB::table('batches')
+            ->whereIn('id', $batchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
 
-//     // Step 2: Fetch classes assigned to the sub-batches the student belongs to
-//     $classes = DB::table('classes')
-//         ->join('users', 'classes.teacher_id', '=', 'users.id') // Join to get teacher's name
-//         ->whereIn('classes.sub_batch_id', $subBatchIds)
-//         ->select('classes.id', 'classes.class_link', 'classes.updated_at', 'users.name as teacher_name')
-//         ->get();
+        $validSubBatchIds = DB::table('sub_batches')
+            ->whereIn('id', $subBatchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
 
-//     // Step 3: Pass the data to the view
-//     return view('student.student_class', compact('classes'));
-// }
+        if (empty($validBatchIds) || empty($validSubBatchIds)) {
+            return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        }
 
-public function showClass()
-{
-    $student = auth()->user();
+        // Step 3: Fetch classes for valid sub-batches
+        $classes = DB::table('classes')
+            ->join('users', 'classes.teacher_id', '=', 'users.id') // Join to get teacher's name
+            ->whereIn('classes.sub_batch_id', $validSubBatchIds)
+            ->select('classes.id', 'classes.class_link', 'classes.file_path', 'classes.updated_at', 'users.name as teacher_name')
+            ->get();
 
-    // Step 1: Fetch assigned batches and sub-batches for the logged-in student
-    $batchUserRecord = DB::table('batch_user')
-        ->where('user_id', $student->id)
-        ->where('role', 'Student')
-        ->first();
-
-    if (!$batchUserRecord) {
-        // No batch or sub-batch assigned to the student
-        return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        // Step 4: Pass data to the view
+        return view('student.student_class', compact('classes'));
     }
 
-    // Decode batch_ids and sub_batches_ids
-    $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
-    $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
-
-    // Step 2: Fetch classes and related PDFs assigned to the sub-batches the student belongs to
-    $classes = DB::table('classes')
-        ->join('users', 'classes.teacher_id', '=', 'users.id') // Join to get teacher's name
-        ->whereIn('classes.sub_batch_id', $subBatchIds)
-        ->select('classes.id', 'classes.class_link', 'classes.file_path', 'classes.updated_at', 'users.name as teacher_name')
-        ->get();
-
-    // Step 3: Pass the data to the view
-    return view('student.student_class', compact('classes'));
-}
-
-
-    // function showLecture()
+    //     public function showLecture()
     // {
-    //     return view('student.student_lecture');
-    // }
+    //     $student = auth()->user();
 
+    //     // Fetch assigned batches and sub-batches for the logged-in student
+    //     $batchUserRecord = DB::table('batch_user')
+    //         ->where('user_id', $student->id)
+    //         ->where('role', 'Student')
+    //         ->first();
+
+    //     if (!$batchUserRecord) {
+    //         // No batch or sub-batch assigned to the student
+    //         return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+    //     }
+
+    //     // Decode batch_ids and sub_batches_ids
+    //     $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
+    //     $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
+
+    //     // Fetch lecture data assigned to the sub-batches the student belongs to
+    //     $lectures = DB::table('lectures')
+    //         ->join('users', 'lectures.teacher_id', '=', 'users.id') // Join to get teacher's name
+    //         ->whereIn('lectures.sub_batch_id', $subBatchIds)
+    //         ->select('lectures.id', 'lectures.video_path', 'lectures.class_link', 'lectures.updated_at', 'users.name as teacher_name')
+    //         ->get();
+
+    //     // Pass data to the view
+    //     return view('student.student_lecture', compact('lectures'));
+    // }
     public function showLecture()
-{
-    $student = auth()->user();
+    {
+        $student = auth()->user();
 
-    // Fetch assigned batches and sub-batches for the logged-in student
-    $batchUserRecord = DB::table('batch_user')
-        ->where('user_id', $student->id)
-        ->where('role', 'Student')
-        ->first();
+        // Step 1: Fetch assigned batches and sub-batches for the logged-in student
+        $batchUserRecord = DB::table('batch_user')
+            ->where('user_id', $student->id)
+            ->where('role', 'Student')
+            ->first();
 
-    if (!$batchUserRecord) {
-        // No batch or sub-batch assigned to the student
-        return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        if (!$batchUserRecord) {
+            // No batch or sub-batch assigned to the student
+            return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        }
+
+        // Decode batch_ids and sub_batches_ids
+        $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
+        $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
+
+        // Step 2: Validate batch and sub-batch flags
+        $validBatchIds = DB::table('batches')
+            ->whereIn('id', $batchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
+
+        $validSubBatchIds = DB::table('sub_batches')
+            ->whereIn('id', $subBatchIds)
+            ->where('flag', 1)
+            ->pluck('id')
+            ->toArray();
+
+        if (empty($validBatchIds) || empty($validSubBatchIds)) {
+            return redirect()->back()->with('error', 'No batch or sub-batch assigned to you.');
+        }
+
+        // Step 3: Fetch lectures for valid sub-batches
+        $lectures = DB::table('lectures')
+            ->join('users', 'lectures.teacher_id', '=', 'users.id') // Join to get teacher's name
+            ->whereIn('lectures.sub_batch_id', $validSubBatchIds)
+            ->select('lectures.id', 'lectures.video_path', 'lectures.class_link', 'lectures.updated_at', 'users.name as teacher_name')
+            ->get();
+
+        // Step 4: Pass data to the view
+        return view('student.student_lecture', compact('lectures'));
     }
-
-    // Decode batch_ids and sub_batches_ids
-    $batchIds = json_decode($batchUserRecord->batch_ids, true) ?? [];
-    $subBatchIds = json_decode($batchUserRecord->sub_batches_ids, true) ?? [];
-
-    // Fetch lecture data assigned to the sub-batches the student belongs to
-    $lectures = DB::table('lectures')
-        ->join('users', 'lectures.teacher_id', '=', 'users.id') // Join to get teacher's name
-        ->whereIn('lectures.sub_batch_id', $subBatchIds)
-        ->select('lectures.id', 'lectures.video_path', 'lectures.class_link', 'lectures.updated_at', 'users.name as teacher_name')
-        ->get();
-
-    // Pass data to the view
-    return view('student.student_lecture', compact('lectures'));
-}
-
 }

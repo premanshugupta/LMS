@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="assets/css/dark-theme.css" />
     <link rel="stylesheet" href="assets/css/semi-dark.css" />
     <link rel="stylesheet" href="assets/css/header-colors.css" />
-    <title>Rocker - Bootstrap 5 Admin Dashboard Template</title>
+    <title>Profile</title>
 </head>
 
 <body>
@@ -1099,72 +1099,98 @@
         <!--end header -->
         <!--start page wrapper -->
         <div class="page-wrapper">
-            <div class="page-content">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="d-flex justify-content-center">
-                                <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm"
-                                    id="pillNav2" role="tablist"
-                                    style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="true">Syllabus</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="false">Class</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link rounded-5" id="contact-tab2" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="false">Lecture</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <hr>
-                    </div>
-                </div>
-                <!--end row-->
-            </div>
+			<div class="page-content">
+				<!--breadcrumb-->
+				<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+					<div class="breadcrumb-title pe-3">Profile</div>
+					<div class="ps-3">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb mb-0 p-0">
+								<li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
+								</li>
+								<li class="breadcrumb-item active" aria-current="page">User Profil</li>
+							</ol>
+						</nav>
+					</div>
+				</div>
+				<!--end breadcrumb-->
+				<div class="container">
+					<div class="main-body">
+						<div class="row">
+							<div class="col-lg-4">
+								<div class="card">
+									<div class="card-body">
+										<div class="d-flex flex-column align-items-center text-center">
+											<img src="assets/images/avatars/avatar-2.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+											<div class="mt-3">
+												<h4>John Doe</h4>
+												<p class="text-secondary mb-1">Full Stack Developer</p>
+												<p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
+												<button class="btn btn-primary">Follow</button>
+												<button class="btn btn-outline-primary">Message</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-8">
+								<div class="card">
+									<div class="card-body">
+										<div class="row mb-3">
+											<div class="col-sm-3">
+												<h6 class="mb-0">Full Name</h6>
+											</div>
+											<div class="col-sm-9 text-secondary">
+												<input type="text" class="form-control" value="John Doe" disabled />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<div class="col-sm-3">
+												<h6 class="mb-0">Email</h6>
+											</div>
+											<div class="col-sm-9 text-secondary">
+												<input type="text" class="form-control" value="john@example.com" disabled />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<div class="col-sm-3">
+												<h6 class="mb-0">Phone</h6>
+											</div>
+											<div class="col-sm-9 text-secondary">
+												<input type="text" class="form-control" value="(239) 816-9029" />
+											</div>
+										</div>
+										<div class="row mb-3">
+											<div class="col-sm-3">
+												<h6 class="mb-0">Mobile</h6>
+											</div>
+											<div class="col-sm-9 text-secondary">
+												<input type="text" class="form-control" value="(320) 380-4539" />
+											</div>
+										</div>
+										{{-- <div class="row mb-3">
+											<div class="col-sm-3">
+												<h6 class="mb-0">Address</h6>
+											</div>
+											<div class="col-sm-9 text-secondary">
+												<input type="text" class="form-control" value="Bay Area, San Francisco, CA" />
+											</div>
+										</div> --}}
+										<div class="row">
+											<div class="col-sm-3"></div>
+											<div class="col-sm-9 text-secondary">
+												<input type="button" class="btn btn-primary px-4" value="Save Changes" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-
-        </div>
-
-        {{-- <div class="page-wrapper">
-            <div class="page-content">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-md-12">
-                            <div class="d-flex justify-content-center">
-                                <ul class="nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm"
-                                    id="pillNav2" role="tablist"
-                                    style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link active rounded-5" id="syllabus-tab" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="true" onclick="showContent('syllabus')">Syllabus</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link rounded-5" id="class-tab" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="false" onclick="showContent('class')">Class</button>
-                                    </li>
-                                    <li class="nav-item" role="presentation">
-                                        <button class="nav-link rounded-5" id="lecture-tab" data-bs-toggle="tab"
-                                            type="button" role="tab" aria-selected="false" onclick="showContent('lecture')">Lecture</button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <hr>
-                        <div id="content-area" class="mt-4">
-                            <!-- Dynamic content will be displayed here -->
-                            <p class="text-center text-muted">Select an option to display content.</p>
-                        </div>
-                    </div>
-                </div>
-                <!--end row-->
-            </div>
-        </div>
         
         <script>
             // Mock data for demonstration purposes
@@ -1179,7 +1205,7 @@
                 const contentArea = document.getElementById('content-area');
                 contentArea.innerHTML = data[type] || "<p class='text-center text-danger'>No data available.</p>";
             }
-        </script> --}}
+        </script>
         
 
         <!--end wrapper-->
